@@ -33,10 +33,7 @@ export default function RestaurantPage() {
     }
 
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/restaurant/list`, {
-      credentials: 'include',
       headers: {
-        'Content-Type': 'application/json',
-        [headerName]: csrfToken,
         'Authorization': `Bearer ${jwt}`,
       },
     })
@@ -74,15 +71,16 @@ export default function RestaurantPage() {
       `${process.env.NEXT_PUBLIC_API_URL}/api/restaurant/save`,
       {
         method: 'POST',
-        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          [headerName]: csrfToken,
           'Authorization': `Bearer ${jwt}`,
         },
         body: JSON.stringify({ restaurantName: name.trim(), restaurantCity: city.trim() }),
       }
     );
+
+    console.log(name)
+    console.log(city)
 
     if (res.ok) {
       const saved = await res.json();

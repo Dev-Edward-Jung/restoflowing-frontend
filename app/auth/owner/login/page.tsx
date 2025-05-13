@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCsrf } from '../../../context/CsrfContext';
+// import { useCsrf } from '../../../context/CsrfContext';
 
 export default function OwnerLoginPage() {
   const router = useRouter();
@@ -10,7 +10,7 @@ export default function OwnerLoginPage() {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { token: csrfToken, headerName } = useCsrf();
+  // const { token: csrfToken, headerName } = useCsrf();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,10 +21,9 @@ export default function OwnerLoginPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/auth/login/owner`,
         {
           method: 'POST',
-          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
-            [headerName]: csrfToken,
+            // [headerName]: csrfToken,
           },
           body: JSON.stringify({ email, password }),
         }
