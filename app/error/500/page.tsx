@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Script from 'next/script';
+import { useCsrf } from '@/context/CsrfContext';
 
 export default function ErrorPage() {
     return (
