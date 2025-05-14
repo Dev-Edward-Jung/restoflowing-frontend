@@ -1,6 +1,6 @@
 import './globals.css';
 import Script from 'next/script';
-// import { CsrfProvider } from './context/CsrfContext';
+import { CsrfProvider } from './context/CsrfContext';
 
 export const metadata = {
     title: 'RestoFlowing',

@@ -1,63 +1,47 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+// import { useCsrf } from '../../../context/CsrfContext';
 
 export default function OwnerLoginPage() {
   const router = useRouter();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // On mount, load saved creds if any
-  useEffect(() => {
-    const saved = localStorage.getItem('rememberMe') === 'true';
-    if (saved) {
-      const e = localStorage.getItem('rememberEmail') ?? '';
-      const p = localStorage.getItem('rememberPassword') ?? '';
-      setEmail(e);
-      setPassword(p);
-      setRememberMe(true);
-    }
-  }, []);
+  // const { token: csrfToken, headerName } = useCsrf();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    console.log(email)
+    console.log(password)
 
-    // save (or clear) creds based on rememberMe
-    if (rememberMe) {
-      localStorage.setItem('rememberMe', 'true');
-      localStorage.setItem('rememberEmail', email);
-      localStorage.setItem('rememberPassword', password);
-    } else {
-      localStorage.removeItem('rememberMe');
-      localStorage.removeItem('rememberEmail');
-      localStorage.removeItem('rememberPassword');
-    }
-
-    // send login request
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/login/owner`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            // [headerName]: csrfToken,
+          },
           body: JSON.stringify({ email, password }),
         }
       );
 
-      if (!response.ok) {
-        const body = await response.json().catch(() => ({}));
-        setError(body.error || body.message || 'Login failed');
-        return;
-      }
-
       const body = await response.json();
-      localStorage.setItem('jwtToken', body.token);
-      router.push('/restaurant/list');
+
+      if (response.ok) {
+        // 1) 로그인 성공 시 JWT 토큰 저장
+        localStorage.setItem('jwtToken', body.token);
+        // 2) 메인 페이지(또는 원하는 페이지)로 이동
+        router.push('/restaurant/list');
+      } else {
+        // 오류 메시지 노출
+        setError(body.error || body.message || 'Login failed');
+      }
     } catch (err) {
       console.error('Login error:', err);
       setError((err as Error).message);
@@ -72,42 +56,58 @@ export default function OwnerLoginPage() {
             <div className="card-body">
               <div className="app-brand justify-content-center">
                 <a href="/auth/owner/login" className="app-brand-link gap-2">
-                  <img src="/img/logo/logo-gray.png" className="logo-auth" alt="Logo" />
+                  <img
+                    src="/img/logo/logo-gray.png"
+                    className="logo-auth"
+                    alt="Logo"
+                  />
                 </a>
               </div>
 
-              <h4 className="mb-2"><strong>Restaurant Owner Login</strong></h4>
+              <h4 className="mb-2">
+                <strong>Restaurant Owner Login</strong>
+              </h4>
               <p className="mb-4">Please sign in to your account</p>
 
-              {error && <div className="alert alert-danger">{error}</div>}
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              )}
 
               <form onSubmit={handleSubmit} className="mb-3">
                 <div className="mb-3">
-                  <label htmlFor="email" className="form-label">Email</label>
+                  <label htmlFor="email" className="form-label">
+                    Email
+                  </label>
                   <input
-                    id="email"
                     type="email"
                     className="form-control"
+                    id="email"
                     placeholder="Enter your email"
                     value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                 </div>
 
                 <div className="mb-3 form-password-toggle">
                   <div className="d-flex justify-content-between">
-                    <label htmlFor="password" className="form-label">Password</label>
-                    <a href="/auth/owner/forget/password"><small>Forgot Password?</small></a>
+                    <label className="form-label" htmlFor="password">
+                      Password
+                    </label>
+                    <a href="/auth/owner/forget/password">
+                      <small>Forgot Password?</small>
+                    </a>
                   </div>
                   <div className="input-group input-group-merge">
                     <input
-                      id="password"
                       type="password"
+                      id="password"
                       className="form-control"
                       placeholder="••••••••••"
                       value={password}
-                      onChange={e => setPassword(e.target.value)}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                     <span className="input-group-text cursor-pointer">
@@ -118,19 +118,22 @@ export default function OwnerLoginPage() {
 
                 <div className="mb-3 form-check">
                   <input
-                    id="remember-me"
-                    type="checkbox"
                     className="form-check-input"
+                    type="checkbox"
+                    id="remember-me"
                     checked={rememberMe}
-                    onChange={e => setRememberMe(e.target.checked)}
+                    onChange={(e) => setRememberMe(e.target.checked)}
                   />
-                  <label htmlFor="remember-me" className="form-check-label">
+                  <label className="form-check-label" htmlFor="remember-me">
                     Remember Me
                   </label>
                 </div>
 
                 <div className="mb-3">
-                  <button className="btn btn-primary d-grid w-100" type="submit">
+                  <button
+                    className="btn btn-primary d-grid w-100"
+                    type="submit"
+                  >
                     Sign in
                   </button>
                 </div>
@@ -138,11 +141,15 @@ export default function OwnerLoginPage() {
 
               <p className="text-center">
                 <span>New on our platform?</span>
-                <a href="/auth/owner/register"><span> Create an account</span></a>
+                <a href="/auth/owner/register">
+                  <span> Create an account</span>
+                </a>
               </p>
               <p className="text-center">
-                <span>Not an owner?</span>
-                <a href="/auth/employee/login"><span> Employee Login</span></a>
+                <span>Are you not owner of a restaurant?</span>
+                <a href="/auth/employee/login">
+                  <span> Employee Login</span>
+                </a>
               </p>
             </div>
           </div>

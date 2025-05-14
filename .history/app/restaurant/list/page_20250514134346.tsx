@@ -44,10 +44,6 @@ export default function RestaurantPage() {
         }
         return res.json();
       })
-      .then((restaurantList: Restaurant[]) => {
-        console.log(restaurantList);       // ← now you’ll see your array
-        setRestaurants(restaurantList); 
-      })
       .catch(err => {
         console.error('Failed to load restaurants', err);
       })
@@ -118,7 +114,7 @@ export default function RestaurantPage() {
                             <tr
                               key={r.id}
                               className="restaurant-row cursor-pointer"
-                              onClick={() => router.push(`/inventory/list?restaurantId=${r.id}`)}
+                              onClick={() => router.push(`/inventory?restaurantId=${r.id}`)}
                             >
                               <td><strong>{r.restaurantName}</strong></td>
                               <td>{r.restaurantCity}</td>

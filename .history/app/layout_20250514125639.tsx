@@ -1,6 +1,6 @@
 import './globals.css';
 import Script from 'next/script';
-// import { CsrfProvider } from './context/CsrfContext';
+import { CsrfProvider } from './context/CsrfContext';
 
 export const metadata = {
     title: 'RestoFlowing',
@@ -31,9 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <script src="/js/config.js" defer></script>
         </head>
         <body>
-        {/* <CsrfProvider> */}
+        <CsrfProvider>
             {children}
-        {/* </CsrfProvider> */}
+        </CsrfProvider>
 
         {/* ✅ Sneat 관련 JS */}
         <Script src="/js/libs/jquery/jquery.js" strategy="afterInteractive" />

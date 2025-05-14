@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useCsrf } from '@/context/CsrfContext';
 import useRestaurantNavigationEnhancer from "../../components/header/OwnerHeader"; // 경로에 맞게 조정
 import OwnerHeader from "@/components/header/ownerHeader";
 
@@ -14,27 +13,23 @@ export default function InventoryPage() {
     const [categoryList, setCategoryList] = useState([]);
     const [unitList, setUnitList] = useState([]);
     const [currentItem, setCurrentItem] = useState(null);
-    const { token, headerName } = useCsrf();
 
     const [newItem, setNewItem] = useState({ name: '', quantity: '', unit: '', categoryId: '' });
 
     useEffect(() => {
         if (!restaurantId) return;
-        const csrfToken = document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
-        const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
 
         const fetchData = async () => {
             const res = await fetch(`/api/inventory/list?restaurantId=${restaurantId}`, {
                 credentials: 'include',
-                headers: { [csrfHeader]: csrfToken }
             });
+            console.log(data)
             const data = await res.json();
             setInventoryList(data.inventoryList || []);
             setCategoryList(data.categoryList || []);
 
             const unitRes = await fetch('/api/inventory/unit/list', {
                 credentials: 'include',
-                headers: { [csrfHeader]: csrfToken }
             });
             const units = await unitRes.json();
             setUnitList(units);
@@ -45,13 +40,10 @@ export default function InventoryPage() {
 
     const updateItem = async () => {
         if (!currentItem) return;
-        const csrfToken = document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
-        const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
         await fetch('/api/inventory/update', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                [csrfHeader]: csrfToken
             },
             body: JSON.stringify({ ...currentItem, restaurantId })
         });
@@ -60,13 +52,10 @@ export default function InventoryPage() {
 
     const deleteItem = async () => {
         if (!currentItem) return;
-        const csrfToken = document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
-        const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
         await fetch('/api/inventory/delete', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                [csrfHeader]: csrfToken
             },
             body: JSON.stringify({ id: currentItem.id, restaurantId })
         });
@@ -74,13 +63,10 @@ export default function InventoryPage() {
     };
 
     const addItem = async () => {
-        const csrfToken = document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
-        const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
         await fetch('/api/inventory/save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                [csrfHeader]: csrfToken
             },
             body: JSON.stringify({ ...newItem, restaurantId })
         });
