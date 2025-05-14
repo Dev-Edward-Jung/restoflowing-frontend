@@ -35,18 +35,22 @@ export default function RestaurantPage() {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/restaurant/list`, {
       headers: {
         'Authorization': `Bearer ${jwt}`,
-        'Accept': 'application/json',
       },
     })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((restaurantList: Restaurant[]) => {
-        console.log(restaurantList);       // ← now you’ll see your array
-        setRestaurants(restaurantList); 
+      // .then(async res => {
+      //   if (!res.ok) {
+      //     if (res.status === 401) {
+      //       // 토큰 만료 혹은 유효하지 않음
+      //       localStorage.removeItem('jwtToken');
+      //       router.push('/auth/owner/login');
+      //     }
+      //     throw new Error(`HTTP ${res.status}`);
+      //   }
+      //   return res.json();
+      // })
+      .then(data => {
+        const list = Array.isArray(data) ? data : data.restaurants;
+        setRestaurants(list ?? []);
       })
       .catch(err => {
         console.error('Failed to load restaurants', err);
@@ -118,7 +122,7 @@ export default function RestaurantPage() {
                             <tr
                               key={r.id}
                               className="restaurant-row cursor-pointer"
-                              onClick={() => router.push(`/inventory/list?restaurantId=${r.id}`)}
+                              onClick={() => router.push(`/inventory?restaurantId=${r.id}`)}
                             >
                               <td><strong>{r.restaurantName}</strong></td>
                               <td>{r.restaurantCity}</td>

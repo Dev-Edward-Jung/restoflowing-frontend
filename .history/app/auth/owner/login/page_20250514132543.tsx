@@ -29,7 +29,6 @@ export default function OwnerLoginPage() {
 
     // save (or clear) creds based on rememberMe
     if (rememberMe) {
-      localStorage.setItem('rememberMe', 'true');
       localStorage.setItem('rememberEmail', email);
       localStorage.setItem('rememberPassword', password);
     } else {

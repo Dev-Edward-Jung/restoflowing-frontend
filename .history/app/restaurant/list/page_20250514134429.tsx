@@ -118,7 +118,7 @@ export default function RestaurantPage() {
                             <tr
                               key={r.id}
                               className="restaurant-row cursor-pointer"
-                              onClick={() => router.push(`/inventory/list?restaurantId=${r.id}`)}
+                              onClick={() => router.push(`/inventory?restaurantId=${r.id}`)}
                             >
                               <td><strong>{r.restaurantName}</strong></td>
                               <td>{r.restaurantCity}</td>

@@ -42,6 +42,7 @@ export default function RestaurantPage() {
         if (!res.ok) {
           throw new Error(`HTTP ${res.status}`);
         }
+        console.log(res.json())
         return res.json();
       })
       .then((restaurantList: Restaurant[]) => {
@@ -118,7 +119,7 @@ export default function RestaurantPage() {
                             <tr
                               key={r.id}
                               className="restaurant-row cursor-pointer"
-                              onClick={() => router.push(`/inventory/list?restaurantId=${r.id}`)}
+                              onClick={() => router.push(`/inventory?restaurantId=${r.id}`)}
                             >
                               <td><strong>{r.restaurantName}</strong></td>
                               <td>{r.restaurantCity}</td>
