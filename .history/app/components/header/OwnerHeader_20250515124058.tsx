@@ -33,8 +33,19 @@ export default function useRestaurantNavigationEnhancer() {
       }
     });
 
+    // 권한 기반 메뉴 제어
+    const roleMeta = document.querySelector('meta[name="user-role"]');
+    const userRole = roleMeta ? roleMeta.getAttribute("content") : null;
+
+    if (userRole !== "OWNER" && userRole !== "MANAGER") {
+      document.querySelectorAll(".employee-list-menu").forEach(el => {
+        const menuItem = el.closest(".menu-item") || el.closest("li");
+        if (menuItem) menuItem.remove();
+      });
+
+      document.querySelectorAll(".owner-manager-only").forEach(el => el.remove());
+    }
   }, [router, searchParams]);
 
 
-  return
 }
