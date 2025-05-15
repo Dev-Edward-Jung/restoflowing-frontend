@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import useRestaurantNavigationEnhancer from "../../components/header/OwnerHeader"; // 경로에 맞게 조정
 import { useRouter } from 'next/navigation';
-import OwnerHeader from "@/components/header/OwnerHeader";
+import OwnerHeader from "@/components/header/ownerHeader";
 
 export default function InventoryPage() {
     const router = useRouter();
@@ -47,9 +47,7 @@ export default function InventoryPage() {
 
             const unitRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/unit/list`, {
                 credentials: 'include',
-                headers: {
-                    'Authorization': `Bearer ${jwt}`,
-                  },
+                'Authorization': `Bearer ${jwt}`,
             });
             const units = await unitRes.json();
             setUnitList(units);
@@ -59,11 +57,6 @@ export default function InventoryPage() {
     }, [restaurantId]);
 
     const updateItem = async () => {
-        const jwt = getJwt();
-        if (!jwt) {
-            router.push('/auth/owner/login');
-            return;
-        }
         if (!currentItem) return;
         await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/update`, {
             method: 'PUT',
@@ -77,11 +70,6 @@ export default function InventoryPage() {
     };
 
     const deleteItem = async () => {
-        const jwt = getJwt();
-        if (!jwt) {
-            router.push('/auth/owner/login');
-            return;
-        }
         if (!currentItem) return;
         await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/delete`, {
             method: 'DELETE',
@@ -95,11 +83,6 @@ export default function InventoryPage() {
     };
 
     const addItem = async () => {
-        const jwt = getJwt();
-        if (!jwt) {
-            router.push('/auth/owner/login');
-            return;
-        }
         await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/save`, {
             method: 'POST',
             headers: {
@@ -113,7 +96,6 @@ export default function InventoryPage() {
 
     return (
         <div className="container p-4">
-            <OwnerHeader></OwnerHeader>
             <h2>Inventory List</h2>
             {Object.entries(
                 inventoryList.reduce((acc, cur) => {
