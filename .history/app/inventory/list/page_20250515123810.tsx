@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import useRestaurantNavigationEnhancer from "../../components/header/OwnerHeader"; // 경로에 맞게 조정
 import { useRouter } from 'next/navigation';
-import OwnerHeader from "@/components/header/OwnerHeader";
+import OwnerHeader from "@/components/header/ownerHeader";
 
 export default function InventoryPage() {
     const router = useRouter();
@@ -113,7 +113,6 @@ export default function InventoryPage() {
 
     return (
         <div className="container p-4">
-            <OwnerHeader></OwnerHeader>
             <h2>Inventory List</h2>
             {Object.entries(
                 inventoryList.reduce((acc, cur) => {

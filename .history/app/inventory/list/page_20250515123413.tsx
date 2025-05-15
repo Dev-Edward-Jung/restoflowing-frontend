@@ -3,11 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import useRestaurantNavigationEnhancer from "../../components/header/OwnerHeader"; // 경로에 맞게 조정
-import { useRouter } from 'next/navigation';
-import OwnerHeader from "@/components/header/OwnerHeader";
+import OwnerHeader from "@/components/header/ownerHeader";
 
 export default function InventoryPage() {
-    const router = useRouter();
     const searchParams = useSearchParams();
     const restaurantId = searchParams.get('restaurantId');
 
@@ -18,26 +16,12 @@ export default function InventoryPage() {
 
     const [newItem, setNewItem] = useState({ name: '', quantity: '', unit: '', categoryId: '' });
 
-    const getJwt = (): string | null => {
-        if (typeof window === 'undefined') return null;
-        return localStorage.getItem('jwtToken');
-      };
-
     useEffect(() => {
         if (!restaurantId) return;
 
-        const jwt = getJwt();
-        if (!jwt) {
-            router.push('/auth/owner/login');
-            return;
-        }
-
         const fetchData = async () => {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/list?restaurantId=${restaurantId}`, {
-                headers: {
-                    'Authorization': `Bearer ${jwt}`,
-                  },
-                
+                credentials: 'include',
             });
             console.log(res)
             const data = await res.json();
@@ -47,9 +31,6 @@ export default function InventoryPage() {
 
             const unitRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/unit/list`, {
                 credentials: 'include',
-                headers: {
-                    'Authorization': `Bearer ${jwt}`,
-                  },
             });
             const units = await unitRes.json();
             setUnitList(units);
@@ -59,11 +40,6 @@ export default function InventoryPage() {
     }, [restaurantId]);
 
     const updateItem = async () => {
-        const jwt = getJwt();
-        if (!jwt) {
-            router.push('/auth/owner/login');
-            return;
-        }
         if (!currentItem) return;
         await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/update`, {
             method: 'PUT',
@@ -77,11 +53,6 @@ export default function InventoryPage() {
     };
 
     const deleteItem = async () => {
-        const jwt = getJwt();
-        if (!jwt) {
-            router.push('/auth/owner/login');
-            return;
-        }
         if (!currentItem) return;
         await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/delete`, {
             method: 'DELETE',
@@ -95,11 +66,6 @@ export default function InventoryPage() {
     };
 
     const addItem = async () => {
-        const jwt = getJwt();
-        if (!jwt) {
-            router.push('/auth/owner/login');
-            return;
-        }
         await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/save`, {
             method: 'POST',
             headers: {
@@ -113,7 +79,6 @@ export default function InventoryPage() {
 
     return (
         <div className="container p-4">
-            <OwnerHeader></OwnerHeader>
             <h2>Inventory List</h2>
             {Object.entries(
                 inventoryList.reduce((acc, cur) => {
