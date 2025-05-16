@@ -6,9 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 const handleToggle = () => {
   const sidebar = document.getElementById("layout-menu");
-  if (sidebar) {
-    sidebar.classList.toggle("collapsed");
-  }
+  sidebar?.classList.toggle("collapsed"); // 또는 show/hide 클래스
 };
 
 
@@ -17,12 +15,12 @@ export default function OwnerMenu() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "/js/vendor/menu.js"; // 또는 Sneat의 bootstrap.js 등
-    script.async = true;
-    document.body.appendChild(script);
+    if (typeof window !== "undefined" && window.bootstrap) {
+      // 필요시 강제 초기화
+      const el = document.querySelectorAll('[data-bs-toggle="collapse"]');
+      el.forEach((item) => new window.bootstrap.Collapse(item));
+    }
   }, []);
-  
 
   useEffect(() => {
     const restaurantId = searchParams.get("restaurantId");

@@ -6,23 +6,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 const handleToggle = () => {
   const sidebar = document.getElementById("layout-menu");
-  if (sidebar) {
-    sidebar.classList.toggle("collapsed");
-  }
+  sidebar?.classList.toggle("collapsed"); // 또는 show/hide 클래스
 };
 
 
 export default function OwnerMenu() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "/js/vendor/menu.js"; // 또는 Sneat의 bootstrap.js 등
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
-  
 
   useEffect(() => {
     const restaurantId = searchParams.get("restaurantId");
@@ -48,9 +38,11 @@ export default function OwnerMenu() {
       }
     });
 
-    
-
-    
+      // ✅ 메뉴가 안 열리는 문제를 방지하기 위해 collapsed 초기화 확인
+  const sidebar = document.getElementById("layout-menu");
+  if (sidebar?.classList.contains("collapsed")) {
+    sidebar.classList.remove("collapsed"); // 필요 시 열어줌
+  }
   }, [router, searchParams]);
 
   return (
@@ -96,10 +88,10 @@ export default function OwnerMenu() {
           </li>
 
           <li className="menu-item">
-            <a onClick={handleToggle} className="menu-link menu-toggle restaurant_link">
+            <button onClick={handleToggle} className="menu-link menu-toggle restaurant_link">
               <i className="menu-icon tf-icons bx bx-dock-top"></i>
               <div data-i18n="Account Settings">My Restaurant</div>
-            </a>
+            </button>
             <ul className="menu-sub">
               <li>
                 <a href="/restaurant/list" className="menu-link category_link">

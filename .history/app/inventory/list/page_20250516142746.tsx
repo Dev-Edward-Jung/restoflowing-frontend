@@ -112,9 +112,9 @@ export default function InventoryPage() {
     };
 
     return (
-        <div className='wrapper'>
-            <OwnerHeader />
+        <div>
         <div className="container p-4">
+            <OwnerHeader />
             <h2>Inventory List</h2>
             {Object.entries(
                 inventoryList.reduce((acc, cur) => {

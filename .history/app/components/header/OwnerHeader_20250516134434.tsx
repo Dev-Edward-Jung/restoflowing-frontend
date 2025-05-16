@@ -6,23 +6,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 const handleToggle = () => {
   const sidebar = document.getElementById("layout-menu");
-  if (sidebar) {
-    sidebar.classList.toggle("collapsed");
-  }
+  sidebar?.classList.toggle("collapsed"); // 또는 show/hide 클래스
 };
 
 
 export default function OwnerMenu() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "/js/vendor/menu.js"; // 또는 Sneat의 bootstrap.js 등
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
-  
 
   useEffect(() => {
     const restaurantId = searchParams.get("restaurantId");
@@ -47,10 +37,6 @@ export default function OwnerMenu() {
         link.setAttribute("href", newHref);
       }
     });
-
-    
-
-    
   }, [router, searchParams]);
 
   return (
@@ -58,14 +44,14 @@ export default function OwnerMenu() {
       <nav className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
         <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
           <span className="nav-item nav-link px-0 me-xl-4">
-            <i className="bx bx-menu bx-sm">
+            <i onClick={handleToggle} className="bx bx-menu bx-sm">
               <a onClick={handleToggle}>
                 <img src="/img/icons/main-menu.png" className="logo-top" />
               </a>
             </i>
           </span>
         </div>
-        <form action="/auth/logout/owner" method="post" style={{ display: "inline" }}>
+        <form action="/page/owner/logout" method="post" style={{ display: "inline" }}>
           <button type="submit" className="btn btn-link" style={{ padding: 0, border: "none", background: "none" }}>
             <i className="bx bx-log-out"></i>
             <span className="align-middle">Log Out</span>
@@ -73,7 +59,7 @@ export default function OwnerMenu() {
         </form>
       </nav>
 
-      <aside id="layout-menu"className="layout-menu menu-vertical menu bg-menu-theme">
+      <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
         <div className="app-brand demo">
           <a href="/page/restaurant/list" className="app-brand-link">
             <img src="/img/logo/logo-gray.png" className="logo-nav" alt="" />
@@ -96,10 +82,10 @@ export default function OwnerMenu() {
           </li>
 
           <li className="menu-item">
-            <a onClick={handleToggle} className="menu-link menu-toggle restaurant_link">
+            <button onClick={handleToggle} className="menu-link menu-toggle restaurant_link">
               <i className="menu-icon tf-icons bx bx-dock-top"></i>
               <div data-i18n="Account Settings">My Restaurant</div>
-            </a>
+            </button>
             <ul className="menu-sub">
               <li>
                 <a href="/restaurant/list" className="menu-link category_link">
