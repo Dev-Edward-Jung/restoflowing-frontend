@@ -112,7 +112,7 @@ export default function InventoryPage() {
     };
 
     return (
-        <div className='wrapper'>
+        <div className='content-wrapper'>
             <OwnerHeader />
         <div className="container p-4">
             <h2>Inventory List</h2>

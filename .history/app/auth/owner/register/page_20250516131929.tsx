@@ -11,6 +11,7 @@ export default function OwnerRegisterPage() {
     });
     const [emailMessage, setEmailMessage] = useState('');
     const [error, setError] = useState('');
+    const { token, headerName } = useCsrf();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
         setForm((prev) => ({
@@ -29,6 +30,7 @@ export default function OwnerRegisterPage() {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/checkEmail`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json',
+                    [headerName]: token,
                 },
                 body: JSON.stringify({ email: form.email }),
                 credentials: 'include',

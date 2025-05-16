@@ -16,12 +16,6 @@ export default function OwnerMenu() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "/js/vendor/menu.js"; // 또는 Sneat의 bootstrap.js 등
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
   
 
   useEffect(() => {

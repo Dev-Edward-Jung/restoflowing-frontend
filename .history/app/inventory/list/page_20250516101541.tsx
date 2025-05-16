@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import useRestaurantNavigationEnhancer from "../../components/header/OwnerHeader"; // 경로에 맞게 조정
 import { useRouter } from 'next/navigation';
 import OwnerHeader from "@/components/header/OwnerHeader";
 
@@ -16,7 +17,6 @@ export default function InventoryPage() {
     const [currentItem, setCurrentItem] = useState(null);
 
     const [newItem, setNewItem] = useState({ name: '', quantity: '', unit: '', categoryId: '' });
-
 
     const getJwt = (): string | null => {
         if (typeof window === 'undefined') return null;
@@ -112,9 +112,8 @@ export default function InventoryPage() {
     };
 
     return (
-        <div className='wrapper'>
-            <OwnerHeader />
         <div className="container p-4">
+            <OwnerHeader />
             <h2>Inventory List</h2>
             {Object.entries(
                 inventoryList.reduce((acc, cur) => {
@@ -187,7 +186,6 @@ export default function InventoryPage() {
             )}
 
             <button className="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addModal">Add Product</button>
-        </div>
         </div>
     );
 }
