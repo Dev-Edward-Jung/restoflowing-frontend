@@ -59,6 +59,8 @@ export default function EmployeeListPage() {
     
     useEffect(() => {
         if (!restaurantId) return;
+    
+
         const fetchEmployees = async () => {
             try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/employee/list?restaurantId=${restaurantId}`, {

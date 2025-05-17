@@ -13,9 +13,27 @@ const handleToggle = () => {
 export default function OwnerMenu() {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+
+  useEffect(() => {
+    const loadScript = () => {
+      const script = document.createElement("script");
+      script.src = "/js/vendor/menu.js";
+      script.async = true;
+      script.onload = () => {
+        // 💡 메뉴 toggle 등 초기화 함수 수동 실행 가능
+        if (window?.initSneatMenu) {
+          window.initSneatMenu(); // 예: menu.js에서 선언된 초기화 함수
+        }
+      };
+      document.body.appendChild(script);
+    };
   
-
-
+    // 0.5초 정도 뒤에 메뉴가 DOM에 모두 그려진 후 실행
+    const timeout = setTimeout(loadScript, 500);
+  
+    return () => clearTimeout(timeout); // 클린업
+  }, []);
 
   useEffect(() => {
     const restaurantId = searchParams.get("restaurantId");
@@ -48,7 +66,7 @@ export default function OwnerMenu() {
         <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
           <span className="nav-item nav-link px-0 me-xl-4">
             <i className="bx bx-menu bx-sm">
-              <button >
+              <button onClick={handleToggle}>
                 <img src="/img/icons/main-menu.png" className="logo-top" />
               </button>
             </i>

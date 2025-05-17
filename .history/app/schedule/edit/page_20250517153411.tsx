@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import OwnerHeader from "@/components/header/OwnerHeader";
-
+import {OwnerHeader} from '@/components/header/OwnerHeader';
 
 interface Schedule {
   shift: string;
@@ -113,7 +112,7 @@ export default function ScheduleEditClientPage() {
 
   return (
     <div className="wrapper">
-    <OwnerHeader />
+    
     <div className="card p-4">
       <h5 className="card-header">Schedule Edit</h5>
       <div className="mb-3">

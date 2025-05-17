@@ -13,9 +13,14 @@ const handleToggle = () => {
 export default function OwnerMenu() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
 
 
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "/js/vendor/menu.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
   useEffect(() => {
     const restaurantId = searchParams.get("restaurantId");
@@ -48,20 +53,22 @@ export default function OwnerMenu() {
         <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
           <span className="nav-item nav-link px-0 me-xl-4">
             <i className="bx bx-menu bx-sm">
-              <button >
+              <a onClick={handleToggle}>
                 <img src="/img/icons/main-menu.png" className="logo-top" />
-              </button>
+              </a>
             </i>
           </span>
         </div>
+        <form method="post" style={{ display: "inline" }}>
           <button type="submit"   onClick={() => {
             localStorage.removeItem('jwtToken');
-            window.location.href = '/auth/owner/login'; // 또는 router.push
-          }}
+            router.push = '/auth/owner/login'; // 또는 router.push
+            }}
            className="btn btn-link" style={{ padding: 0, border: "none", background: "none" }}>
             <i className="bx bx-log-out"></i>
             <span className="align-middle">Log Out</span>
           </button>
+        </form>
       </nav>
 
       <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">

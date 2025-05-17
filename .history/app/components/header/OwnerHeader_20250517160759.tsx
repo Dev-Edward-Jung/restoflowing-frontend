@@ -14,7 +14,21 @@ export default function OwnerMenu() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
-
+  useEffect(() => {
+    const toggleElements = document.querySelectorAll(".layout-menu-toggle");
+  
+    toggleElements.forEach((el) => {
+      el.addEventListener("click", () => {
+        document.getElementById("layout-menu")?.classList.toggle("collapsed");
+      });
+    });
+  
+    return () => {
+      toggleElements.forEach((el) => {
+        el.removeEventListener("click", () => {});
+      });
+    };
+  }, []);
 
 
   useEffect(() => {

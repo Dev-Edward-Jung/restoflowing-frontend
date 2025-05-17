@@ -13,8 +13,24 @@ const handleToggle = () => {
 export default function OwnerMenu() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const buttons = document.querySelectorAll('.layout-menu-toggle');
+      const toggle = () => {
+        const sidebar = document.getElementById('layout-menu');
+        sidebar?.classList.toggle('collapsed');
+      };
+      buttons.forEach((btn) => btn.addEventListener('click', toggle));
+  
+      // cleanup
+      return () => {
+        buttons.forEach((btn) => btn.removeEventListener('click', toggle));
+      };
+    }, 0); // 최소한의 딜레이로 렌더링 이후 실행
+  
+    return () => clearTimeout(timeout);
+  }, []);
 
 
   useEffect(() => {

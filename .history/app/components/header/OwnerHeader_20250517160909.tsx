@@ -14,7 +14,19 @@ export default function OwnerMenu() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
-
+  useEffect(() => {
+    const toggleButtons = document.querySelectorAll(".layout-menu-toggle");
+  
+    toggleButtons.forEach((btn) => {
+      btn.addEventListener("click", handleToggle);
+    });
+  
+    return () => {
+      toggleButtons.forEach((btn) => {
+        btn.removeEventListener("click", handleToggle);
+      });
+    };
+  }, []);
 
 
   useEffect(() => {

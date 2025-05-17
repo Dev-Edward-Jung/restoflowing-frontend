@@ -52,7 +52,7 @@ export default function EmployeeRegisterPage() {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/employee/register`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
           ownerPassword: password,
