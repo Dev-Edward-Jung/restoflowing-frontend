@@ -13,8 +13,6 @@ const handleToggle = () => {
 export default function OwnerMenu() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
-
 
 
   useEffect(() => {

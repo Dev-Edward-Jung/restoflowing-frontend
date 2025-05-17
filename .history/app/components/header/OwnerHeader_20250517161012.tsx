@@ -13,8 +13,21 @@ const handleToggle = () => {
 export default function OwnerMenu() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
 
+useEffect(() => {
+  const buttons = document.querySelectorAll('.layout-menu-toggle');
+
+  const toggle = () => {
+    const sidebar = document.getElementById('layout-menu');
+    sidebar?.classList.toggle('collapsed');
+  };
+
+  buttons.forEach((btn) => btn.addEventListener('click', toggle));
+
+  return () => {
+    buttons.forEach((btn) => btn.removeEventListener('click', toggle));
+  };
+}, []);
 
 
   useEffect(() => {

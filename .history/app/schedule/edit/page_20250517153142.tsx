@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import OwnerHeader from "@/components/header/OwnerHeader";
-
 
 interface Schedule {
   shift: string;
@@ -112,15 +110,13 @@ export default function ScheduleEditClientPage() {
   if (!restaurantId) return <p className="text-danger p-4">❌ No restaurant ID provided.</p>;
 
   return (
-    <div className="wrapper">
-    <OwnerHeader />
     <div className="card p-4">
       <h5 className="card-header">Schedule Edit</h5>
       <div className="mb-3">
         <label>Start Date</label>
-        <input type="date" className="form-control" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+        <input type="date" className="form-control" value={startDate} />
         <label>End Date</label>
-        <input type="date" className="form-control" value={endDate} onChange={(e) => setEndDate(e.target.value)}/>
+        <input type="date" className="form-control" value={endDate} />
       </div>
 
       <p>Kitchen Schedule</p>
@@ -142,7 +138,6 @@ export default function ScheduleEditClientPage() {
       <button className="btn btn-secondary mt-3">
         Save Changes
       </button>
-    </div>
     </div>
   );
 }

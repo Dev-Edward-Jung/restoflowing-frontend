@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import OwnerHeader from "@/components/header/OwnerHeader";
 
 interface Schedule {
     shift: string;
@@ -113,8 +112,6 @@ export default function EmployeeScheduleClientPage() {
     if (!restaurantId) return <p className="text-danger p-4">❌ No restaurant ID provided.</p>;
 
     return (
-        <div className='wrapper'>
-            <OwnerHeader /> 
         <div className="card p-4">
             <h5 className="card-header">Schedule List</h5>
             <div className="card-body">
@@ -153,11 +150,10 @@ export default function EmployeeScheduleClientPage() {
                     </table>
                 </div>
 
-                <a href={`/schedule/edit?restaurantId=${restaurantId}`} className="btn btn-primary mt-3 owner-manager-only">
+                <a href={`/page/employee/schedule/edit?restaurantId=${restaurantId}`} className="btn btn-primary mt-3 owner-manager-only">
                     Edit Schedule
                 </a>
             </div>
-        </div>
         </div>
     );
 }

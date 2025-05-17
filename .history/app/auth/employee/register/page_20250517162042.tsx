@@ -13,7 +13,6 @@ export default function EmployeeRegisterPage() {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [agreed, setAgreed] = useState(false);
-  const [canSubmit, setCanSubmit] = useState(false);
 
   const isPasswordValid = () => {
     const hasNumber = /[0-9]/.test(password);
@@ -21,38 +20,36 @@ export default function EmployeeRegisterPage() {
     return hasNumber && hasSpecialChar;
   };
 
-  useEffect(() => {
-    const valid =
-      password &&
-      passwordConfirm &&
-      password === passwordConfirm &&
-      isPasswordValid() &&
-      agreed;
-
-    setCanSubmit(valid);
-
+  const isFormValid = () => {
     if (!password || !passwordConfirm) {
       setErrorMsg('Please input your password');
-    } else if (!isPasswordValid()) {
-      setErrorMsg('Password must include at least one number and one special character');
-    } else if (password !== passwordConfirm) {
-      setErrorMsg('Password is not same');
-    } else if (!agreed) {
-      setErrorMsg('You must agree to the privacy policy & terms');
-    } else {
-      setErrorMsg('');
+      return false;
     }
-  }, [password, passwordConfirm, agreed]);
+    if (!isPasswordValid()) {
+      setErrorMsg('Password must include at least one number and one special character');
+      return false;
+    }
+    if (password !== passwordConfirm) {
+      setErrorMsg('Password is not same');
+      return false;
+    }
+    if (!agreed) {
+      setErrorMsg('You must agree to the privacy policy & terms');
+      return false;
+    }
+    setErrorMsg('');
+    return true;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!canSubmit) return;
+    if (!isFormValid()) return;
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/employee/register`, {
+      const res = await fetch('/page/employee/register', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
           ownerPassword: password,
@@ -119,7 +116,7 @@ export default function EmployeeRegisterPage() {
 
           {errorMsg && <div className="text-danger mb-3">{errorMsg}</div>}
 
-          <button type="submit" className="btn btn-primary w-100" disabled={!canSubmit}>
+          <button type="submit" className="btn btn-primary w-100" disabled={!isFormValid()}>
             Sign up
           </button>
         </form>

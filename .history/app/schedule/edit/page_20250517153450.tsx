@@ -113,7 +113,7 @@ export default function ScheduleEditClientPage() {
 
   return (
     <div className="wrapper">
-    <OwnerHeader />
+    
     <div className="card p-4">
       <h5 className="card-header">Schedule Edit</h5>
       <div className="mb-3">

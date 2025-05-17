@@ -31,12 +31,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <script src="/js/config.js" defer></script>
         </head>
         <body>
+        {/* <CsrfProvider> */}
             {children}
+        {/* </CsrfProvider> */}
 
-
-        </body>
-                {/* ✅ Sneat 관련 JS */}
-                <Script src="/js/libs/jquery/jquery.js" strategy="afterInteractive" />
+        {/* ✅ Sneat 관련 JS */}
+        <Script src="/js/libs/jquery/jquery.js" strategy="afterInteractive" />
         <Script src="/js/libs/popper/popper.js" strategy="afterInteractive" />
         <Script src="/js/vendor/bootstrap.js" strategy="afterInteractive" />
         <Script src="/js/libs/perfect-scrollbar/perfect-scrollbar.js" strategy="afterInteractive" />
@@ -44,6 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script src="/js/libs/apex-charts/apexcharts.js" strategy="afterInteractive" />
         <Script src="/js/main.js" strategy="afterInteractive" />
         <Script src="/js/dashboards-analytics.js" strategy="afterInteractive" />
+        </body>
         </html>
     );
 }

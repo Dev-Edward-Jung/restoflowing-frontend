@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import OwnerHeader from "@/components/header/OwnerHeader";
+import { useSearchParams,useRouter } from 'next/navigation';
 
 interface Schedule {
     shift: string;
@@ -20,32 +19,35 @@ interface Employee {
 export default function EmployeeScheduleClientPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const restaurantId = searchParams.get('restaurantId');
 
-    const [restaurantId, setRestaurantId] = useState<string | null>(null);
     const [kitchenList, setKitchenList] = useState<Employee[]>([]);
     const [serverList, setServerList] = useState<Employee[]>([]);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
-    useEffect(() => {
-        const rid = searchParams.get('restaurantId');
-        if (!rid) {
-            alert("There is no Restaurant Info");
-            router.push('/auth/owner/login');
-            return;
-        }
-        setRestaurantId(rid);
-    }, [searchParams, router]);
+    const getJwt = (): string | null => {
+        if (typeof window === 'undefined') return null;
+        return localStorage.getItem('jwtToken');
+    };
+
+    
+    const jwt = getJwt();
+    if (!jwt) {
+        router.push('/auth/owner/login');
+        return;
+    }
 
     useEffect(() => {
         async function fetchData() {
-            const jwt = localStorage.getItem('jwtToken');
-            if (!jwt || !restaurantId) return;
+            if (!restaurantId) return;
+
+            const csrfToken = document.querySelector('meta[name="_csrf"]')?.getAttribute('content') ?? '';
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content') ?? '';
 
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/employee/schedule/list?restaurantId=${restaurantId}`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${jwt}`,
                 },
                 credentials: 'include',
             });
@@ -113,19 +115,17 @@ export default function EmployeeScheduleClientPage() {
     if (!restaurantId) return <p className="text-danger p-4">❌ No restaurant ID provided.</p>;
 
     return (
-        <div className='wrapper'>
-            <OwnerHeader /> 
         <div className="card p-4">
             <h5 className="card-header">Schedule List</h5>
             <div className="card-body">
                 <div className="table-responsive text-nowrap text-primary mb-3">
                     <div className="input-group-sm list-view">
-                        <span className="mt-3">
-                          Start Date: <input type="date" className="form-control" value={startDate} disabled />
-                        </span>
+            <span className="mt-3">
+              Start Date: <input type="date" className="form-control" value={startDate} disabled />
+            </span>
                         <span className="mt-3 m-lg-3">
-                          End Date: <input type="date" className="form-control" value={endDate} disabled />
-                        </span>
+              End Date: <input type="date" className="form-control" value={endDate} disabled />
+            </span>
                     </div>
                 </div>
 
@@ -153,11 +153,10 @@ export default function EmployeeScheduleClientPage() {
                     </table>
                 </div>
 
-                <a href={`/schedule/edit?restaurantId=${restaurantId}`} className="btn btn-primary mt-3 owner-manager-only">
+                <a href={`/page/employee/schedule/edit?restaurantId=${restaurantId}`} className="btn btn-primary mt-3 owner-manager-only">
                     Edit Schedule
                 </a>
             </div>
-        </div>
         </div>
     );
 }

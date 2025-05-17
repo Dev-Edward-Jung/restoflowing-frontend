@@ -13,8 +13,6 @@ const handleToggle = () => {
 export default function OwnerMenu() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
-
 
 
   useEffect(() => {
@@ -48,7 +46,7 @@ export default function OwnerMenu() {
         <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
           <span className="nav-item nav-link px-0 me-xl-4">
             <i className="bx bx-menu bx-sm">
-              <button >
+              <button}>
                 <img src="/img/icons/main-menu.png" className="logo-top" />
               </button>
             </i>
