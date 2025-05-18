@@ -49,7 +49,7 @@ export default function EmployeeRegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!canSubmit) return;
-    console.log(password)
+
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/employee/register?token=${token}&restaurantId=${restaurantId}`, {

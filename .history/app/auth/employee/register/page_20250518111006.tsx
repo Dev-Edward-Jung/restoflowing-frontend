@@ -49,7 +49,8 @@ export default function EmployeeRegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!canSubmit) return;
-    console.log(password)
+
+    const data = {password}
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/employee/register?token=${token}&restaurantId=${restaurantId}`, {
@@ -57,9 +58,9 @@ export default function EmployeeRegisterPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ password: password }),
+        body: JSON.stringify(data)
       });
-      console.log(res)
+
       if (!res.ok) throw new Error('Failed to register');
       alert('Registered successfully!');
       router.push('/auth/employee/login');

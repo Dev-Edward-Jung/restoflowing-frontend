@@ -49,20 +49,29 @@ export default function EmployeeRegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!canSubmit) return;
-    console.log(password)
-
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/employee/register?token=${token}&restaurantId=${restaurantId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password: password }),
-      });
-      console.log(res)
-      if (!res.ok) throw new Error('Failed to register');
-      alert('Registered successfully!');
-      router.push('/auth/employee/login');
+      const payload = {
+        password,            // 새로 설정할 비밀번호
+        token,               // URL 파라미터로 받은 초대 토큰
+        restaurantId,        // URL 파라미터로 받은 레스토랑 ID
+      };
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/employee/register`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',  // JSON 으로 보냄
+          },
+          body: JSON.stringify(payload),         // JSON.stringify 사용
+        }
+      );
+  
+      if (!res.ok) {
+        // 서버가 400/500 응답을 줄 때, 상태 코드를 함께 로깅해 보면 원인 파악에 도움됩니다.
+        console.error('Registration failed with status', res.status);
+        throw new Error('Failed to register');
+      }
     } catch (err) {
       console.error(err);
       setErrorMsg('❌ Registration failed. Please try again.');

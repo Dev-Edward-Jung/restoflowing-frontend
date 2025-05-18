@@ -49,6 +49,8 @@ export default function EmployeeRegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!canSubmit) return;
+
+    const data = {password}
     console.log(password)
 
     try {
@@ -57,7 +59,7 @@ export default function EmployeeRegisterPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ password: password }),
+        body: JSON.stringify(data)
       });
       console.log(res)
       if (!res.ok) throw new Error('Failed to register');

@@ -17,7 +17,7 @@ export default function EmployeeListPage() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [emailConfirm, setEmailConfirm] = useState('');
-    const [memberRole, setRole] = useState('');
+    const [role, setRole] = useState('');
     const [jwt, setJwt] = useState<string | null>(null);
 
 
@@ -43,17 +43,10 @@ export default function EmployeeListPage() {
                 'Authorization': `Bearer ${jwt}`,
               },
             });
-            if(res.ok){
-                console.log("okay?")
-            }
-            if (!res.ok) {
-                throw new Error('Failed to load employees');
-            }
+            console.log(res)
+            if (!res.ok) throw new Error('Failed to load employees');
             const data = await res.json();
-            console.log(data)
             setEmployees(data);
-
-            
           } catch (err) {
             alert('Failed to fetch employees.');
             console.error(err);
@@ -64,10 +57,30 @@ export default function EmployeeListPage() {
       }, [restaurantId, jwt]);
 
 
+    
+    useEffect(() => {
+        if (!restaurantId) return;
+        const fetchEmployees = async () => {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/employee/list?restaurantId=${restaurantId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${jwt}`,
+                    },
+                });
+                if (!res.ok) throw new Error('Failed to load employees');
+                const data = await res.json();
+                setEmployees(data);
+            } catch (err) {
+                alert('Failed to fetch employees.');
+                console.error(err);
+            }
+        };
 
+        fetchEmployees();
+    }, [restaurantId]);
 
     const inviteEmployee = async () => {
-        if (!restaurantId || email !== emailConfirm || !name || !email || !memberRole) {
+        if (!restaurantId || email !== emailConfirm || !name || !email || !role) {
             alert('Please fill the form correctly.');
             return;
         }
@@ -78,7 +91,7 @@ export default function EmployeeListPage() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${jwt}`
              },
-            body: JSON.stringify({ name, email, restaurantId, memberRole: memberRole }),
+            body: JSON.stringify({ name, email, restaurantId, memberRole: role }),
         });
 
         if (res.ok) {
@@ -160,7 +173,7 @@ export default function EmployeeListPage() {
                                         <label className="form-label">Employee Role</label>
                                         <select
                                             className="form-select form-select-lg roleSelect"
-                                            value={memberRole}
+                                            value={role}
                                             onChange={(e) => setRole(e.target.value)}
                                         >
                                             <option value="">Role</option>
