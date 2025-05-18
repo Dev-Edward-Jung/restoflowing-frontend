@@ -160,7 +160,7 @@ export default function EmployeeListPage() {
                                         <label className="form-label">Employee Role</label>
                                         <select
                                             className="form-select form-select-lg roleSelect"
-                                            value={memberRole}
+                                            value={role}
                                             onChange={(e) => setRole(e.target.value)}
                                         >
                                             <option value="">Role</option>
