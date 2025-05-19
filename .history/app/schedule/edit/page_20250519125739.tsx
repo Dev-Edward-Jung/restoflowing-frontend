@@ -71,6 +71,8 @@ export default function ScheduleEditClientPage() {
       setKitchenList(data.kitchenList || []);
       setServerList(data.serverList || []);
 
+      console.log(jsonData.endDate)
+      console.log(jsonData.startDate)
 
       if (jsonData?.startDate || jsonData?.endDate) {
         setStartDate(jsonData.startDate);

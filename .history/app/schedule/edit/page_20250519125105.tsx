@@ -74,7 +74,6 @@ export default function ScheduleEditClientPage() {
 
       if (jsonData?.startDate || jsonData?.endDate) {
         setStartDate(jsonData.startDate);
-        setEndDate(jsonData.endDate)
       } else {
         console.warn("⚠️ startDate and endDate is missing from response.");
         setStartDate(''); // 또는 setStartDate('') 등 안전한 값으로 초기화
@@ -100,12 +99,7 @@ export default function ScheduleEditClientPage() {
       memberRole: emp.memberRole,
       schedules: emp.schedules, // 14일치 스케줄
     }));
-    
-    const payload = {
-      employees,
-      startDate,
-      endDate
-    }
+
     console.log(payload)
   
     try {

@@ -28,7 +28,6 @@ export default function ScheduleEditClientPage() {
   const [serverList, setServerList] = useState<Employee[]>([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [shift, setShift] = useState('');
 
   const getJwt = (): string | null => {
     if (typeof window === 'undefined') return null;
@@ -74,7 +73,6 @@ export default function ScheduleEditClientPage() {
 
       if (jsonData?.startDate || jsonData?.endDate) {
         setStartDate(jsonData.startDate);
-        setEndDate(jsonData.endDate)
       } else {
         console.warn("⚠️ startDate and endDate is missing from response.");
         setStartDate(''); // 또는 setStartDate('') 등 안전한 값으로 초기화
@@ -95,18 +93,13 @@ export default function ScheduleEditClientPage() {
     // 스케줄 전체 리스트 병합
     const allEmployees = [...kitchenList, ...serverList];
   
-    const employees = allEmployees.map((emp) => ({
+    const payload = allEmployees.map((emp) => ({
       id: emp.id,
       memberRole: emp.memberRole,
+      shiftStartDate: startDate,
+      shiftEndDate: endDate,
       schedules: emp.schedules, // 14일치 스케줄
     }));
-    
-    const payload = {
-      employees,
-      startDate,
-      endDate
-    }
-    console.log(payload)
   
     try {
       const res = await fetch(
@@ -123,7 +116,7 @@ export default function ScheduleEditClientPage() {
   
       if (res.ok) {
         alert("✅ 스케줄 저장 완료!");
-        router.push(`/schedule/list?restaurantId=${restaurantId}`);
+        router.push(`/owner/schedule/view?restaurantId=${restaurantId}`);
       } else {
         const errorText = await res.text();
         alert("❌ 저장 실패: " + errorText);
@@ -143,14 +136,11 @@ export default function ScheduleEditClientPage() {
     OFF: 'bg-label-warning',
   };
 
-  const renderSelect = (
-    value: string,
-    onChange: (newValue: string) => void
-  ) => (
+  const renderSelect = (value: string) => (
     <select
       className={`form-select form-select-sm form-no-border ${colorMap[value] || ''}`}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
+      defaultValue={value}
+      disabled
     >
       <option value="FULL_TIME">Full Time</option>
       <option value="DINNER">Dinner</option>
@@ -159,34 +149,15 @@ export default function ScheduleEditClientPage() {
     </select>
   );
 
-  const renderTableRows = (list: Employee[], isKitchen: boolean) =>
-    list.flatMap((emp, empIdx) => [1, 2].map((week) => {
+  const renderTableRows = (list: Employee[]) =>
+    list.flatMap((emp) => [1, 2].map((week) => {
       const baseIdx = (week - 1) * 7;
       const schedules = emp.schedules.slice(baseIdx, baseIdx + 7);
-  
+
       return (
         <tr key={`${emp.id}-${week}`}>
           {week === 1 && <td rowSpan={2}><strong>{emp.name}</strong></td>}
-          {schedules.map((s, i) => (
-            <td key={i}>
-              {renderSelect(s.shift, (newValue) => {
-                const updatedList = isKitchen ? [...kitchenList] : [...serverList];
-                const updatedEmployee = { ...updatedList[empIdx] };
-                const updatedSchedules = [...updatedEmployee.schedules];
-  
-                updatedSchedules[baseIdx + i] = {
-                  ...updatedSchedules[baseIdx + i],
-                  shift: newValue
-                };
-  
-                updatedEmployee.schedules = updatedSchedules;
-                updatedList[empIdx] = updatedEmployee;
-  
-                if (isKitchen) setKitchenList(updatedList);
-                else setServerList(updatedList);
-              })}
-            </td>
-          ))}
+          {schedules.map((s, idx) => <td key={idx}>{renderSelect(s.shift)}</td>)}
         </tr>
       );
     }));
@@ -210,7 +181,7 @@ export default function ScheduleEditClientPage() {
         <thead>
           <tr><th>Name</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>
         </thead>
-        <tbody>{renderTableRows(kitchenList, true)}</tbody>
+        <tbody>{renderTableRows(kitchenList)}</tbody>
       </table>
 
       <p className="mt-5">Server Schedule</p>
@@ -218,7 +189,7 @@ export default function ScheduleEditClientPage() {
         <thead>
           <tr><th>Name</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>
         </thead>
-        <tbody>{renderTableRows(serverList, false)}</tbody>
+        <tbody>{renderTableRows(serverList)}</tbody>
       </table>
 
       <button className="btn btn-secondary mt-3" onClick={handleSave}>
