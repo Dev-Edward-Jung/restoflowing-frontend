@@ -74,7 +74,6 @@ export default function ScheduleEditClientPage() {
 
       if (jsonData?.startDate || jsonData?.endDate) {
         setStartDate(jsonData.startDate);
-        setEndDate(jsonData.endDate)
       } else {
         console.warn("⚠️ startDate and endDate is missing from response.");
         setStartDate(''); // 또는 setStartDate('') 등 안전한 값으로 초기화

@@ -57,24 +57,18 @@ export default function EmployeeScheduleClientPage() {
 
             const jsonData = await res.json();
             const data = jsonData.employees
-
-            
             const kitchen = data.kitchenList || [];
             const server = data.serverList || [];
 
             setKitchenList(kitchen);
             setServerList(server);
 
-            
-            
-            if (jsonData?.startDate || jsonData?.endDate) {
-                setStartDate(jsonData.startDate);
-                setEndDate(jsonData.endDate)
-              } else {
-                console.warn("⚠️ startDate and endDate is missing from response.");
-                setStartDate(''); // 또는 setStartDate('') 등 안전한 값으로 초기화
-              }
-            };
+            const firstSchedule = kitchen?.[0]?.schedules?.[0];
+            if (firstSchedule) {
+                setStartDate(firstSchedule.shiftStartDate);
+                setEndDate(firstSchedule.shiftEndDate);
+            }
+        }
 
         fetchData();
     }, [restaurantId]);

@@ -27,7 +27,6 @@ export default function ScheduleEditClientPage() {
   const [kitchenList, setKitchenList] = useState<Employee[]>([]);
   const [serverList, setServerList] = useState<Employee[]>([]);
   const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
   const [shift, setShift] = useState('');
 
   const getJwt = (): string | null => {
@@ -74,7 +73,6 @@ export default function ScheduleEditClientPage() {
 
       if (jsonData?.startDate || jsonData?.endDate) {
         setStartDate(jsonData.startDate);
-        setEndDate(jsonData.endDate)
       } else {
         console.warn("⚠️ startDate and endDate is missing from response.");
         setStartDate(''); // 또는 setStartDate('') 등 안전한 값으로 초기화
@@ -95,17 +93,14 @@ export default function ScheduleEditClientPage() {
     // 스케줄 전체 리스트 병합
     const allEmployees = [...kitchenList, ...serverList];
   
-    const employees = allEmployees.map((emp) => ({
-      id: emp.id,
+    const payload = allEmployees.map((emp) => ({
+      restaurantEmployeeId: emp.id,
       memberRole: emp.memberRole,
+      shiftStartDate: startDate,
+      shiftEndDate: endDate,
       schedules: emp.schedules, // 14일치 스케줄
     }));
-    
-    const payload = {
-      employees,
-      startDate,
-      endDate
-    }
+
     console.log(payload)
   
     try {
