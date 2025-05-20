@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
-import OwnerHeader from "@/components/header/OwnerHeader";
 
 export default function AnnouncementDetailPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = useParams();
 
-  const announcementId = params.id;
+  const announcementId = params.announcementId as string;
   const restaurantId = searchParams.get('restaurantId');
 
   const [announcement, setAnnouncement] = useState<any>(null);
+  const [loginUser, setLoginUser] = useState({ id: '', name: '' });
 
   function getJwt(){
     try{
@@ -29,7 +29,7 @@ export default function AnnouncementDetailPage() {
         return jwt;
     }
     catch{
-        alert(" Something Wrong")
+        alert("Token Failed")
     }
 
   }
@@ -38,7 +38,7 @@ export default function AnnouncementDetailPage() {
   const fetchData = async () => {
     if (!announcementId || !restaurantId) {
       alert("Wrong request");
-      router.push(`/announcement/list?restaurantId=${restaurantId}`);
+      router.push(`/announcement/list`);
       return;
     } 
     const jwt = getJwt()
@@ -49,10 +49,8 @@ export default function AnnouncementDetailPage() {
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/announcement/detail/${announcementId}?restaurantId=${restaurantId}`,{
-        headers : {
-            'Authorization': `Bearer ${jwt}`,
-      }}
-    );
+        hea
+      });
       if (!res.ok) throw new Error('Fetch failed');
       const data = await res.json();
       setAnnouncement(data);
@@ -66,13 +64,16 @@ export default function AnnouncementDetailPage() {
   const deleteAnnouncement = async () => {
     const confirmed = confirm("Would you really like to delete?");
     if (!confirmed) return;
-    const jwt = getJwt()
+
     try {
+      const csrfToken = document.querySelector('meta[name="_csrf"]')?.getAttribute('content') || '';
+      const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content') || '';
+
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/announcement/delete/${announcementId}?restaurantId=${restaurantId}`, {
         method: 'DELETE',
         headers: {
-            'Authorization': `Bearer ${jwt}`,
-        },
+          [csrfHeader]: csrfToken
+        }
       });
 
       if (res.ok) {
@@ -91,10 +92,13 @@ export default function AnnouncementDetailPage() {
     fetchData();
   }, [announcementId, restaurantId]);
 
+  const isWriter =
+    announcement &&
+    loginUser.id === String(announcement.writerId) &&
+    loginUser.name === announcement.writerName;
+
   return (
-    <div className='wrapper'>
-        <OwnerHeader />
-        <div className="container py-4">
+    <div className="container py-4">
       {announcement ? (
         <div className="card p-4">
           <h5 className="card-header">{announcement.title}</h5>
@@ -105,11 +109,12 @@ export default function AnnouncementDetailPage() {
             <div dangerouslySetInnerHTML={{ __html: announcement.content }} />
           </div>
 
+          {isWriter && (
             <div className="text-end mt-3">
               <button
                 className="btn btn-primary me-2"
                 onClick={() =>
-                  router.push(`/announcement/update/${announcementId}?restaurantId=${restaurantId}`)
+                  router.push(`/page/announcement/update/${announcementId}?restaurantId=${restaurantId}`)
                 }
               >
                 Update
@@ -118,11 +123,11 @@ export default function AnnouncementDetailPage() {
                 Delete
               </button>
             </div>
+          )}
         </div>
       ) : (
         <p>Loading...</p>
       )}
-    </div>
     </div>
   );
 }

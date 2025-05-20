@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
-import OwnerHeader from "@/components/header/OwnerHeader";
 
 export default function AnnouncementDetailPage() {
   const router = useRouter();
@@ -93,7 +92,6 @@ export default function AnnouncementDetailPage() {
 
   return (
     <div className='wrapper'>
-        <OwnerHeader />
         <div className="container py-4">
       {announcement ? (
         <div className="card p-4">

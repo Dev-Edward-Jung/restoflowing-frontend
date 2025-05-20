@@ -36,7 +36,6 @@ export default function AnnouncementUpdatePage() {
         }
         catch{
             alert(" Something Wrong")
-            router.push("/auth/owner/login")
         }
     
       }
@@ -82,7 +81,7 @@ export default function AnnouncementUpdatePage() {
 
         if (res.ok) {
             alert('Updated successfully!');
-            router.push(`/announcement/detail/${id}?restaurantId=${restaurantId}`);
+            router.push(`/page/announcement/detail/${id}?restaurantId=${restaurantId}`);
         } else {
             alert('Update failed.');
         }
@@ -92,26 +91,22 @@ export default function AnnouncementUpdatePage() {
         const confirmed = confirm('Do you really want to delete this?');
         if (!confirmed) return;
 
-        const jwt = getJwt();
-
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/announcement/delete/${id}?restaurantId=${restaurantId}`, {
+        const res = await fetch(`/api/announcement/delete/${id}?restaurantId=${restaurantId}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': `Bearer ${jwt}`,
             },
         });
 
         if (res.ok) {
             alert('Deleted successfully!');
-            router.push(`/announcement/list?restaurantId=${restaurantId}`);
+            router.push(`/page/announcement/list?restaurantId=${restaurantId}`);
         } else {
             alert('Delete failed.');
         }
     };
 
     return (
-        <div className='wrapper'>
-            <div className="card p-4">
+        <div className="card p-4">
             <div className="card-body">
                 <form>
                     <div className="mb-3">
@@ -159,7 +154,5 @@ export default function AnnouncementUpdatePage() {
                 <button onClick={handleDelete} className="btn btn-danger">Delete</button>
             </div>
         </div>
-        </div>
-        
     );
 }

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
-import OwnerHeader from "@/components/header/OwnerHeader";
 
 export default function AnnouncementDetailPage() {
   const router = useRouter();
@@ -13,6 +12,8 @@ export default function AnnouncementDetailPage() {
   const restaurantId = searchParams.get('restaurantId');
 
   const [announcement, setAnnouncement] = useState<any>(null);
+
+  console.log(announcementId)
 
   function getJwt(){
     try{
@@ -93,7 +94,6 @@ export default function AnnouncementDetailPage() {
 
   return (
     <div className='wrapper'>
-        <OwnerHeader />
         <div className="container py-4">
       {announcement ? (
         <div className="card p-4">
@@ -105,11 +105,12 @@ export default function AnnouncementDetailPage() {
             <div dangerouslySetInnerHTML={{ __html: announcement.content }} />
           </div>
 
+           (
             <div className="text-end mt-3">
               <button
                 className="btn btn-primary me-2"
                 onClick={() =>
-                  router.push(`/announcement/update/${announcementId}?restaurantId=${restaurantId}`)
+                  router.push(`/page/announcement/update/${announcementId}?restaurantId=${restaurantId}`)
                 }
               >
                 Update
@@ -118,6 +119,7 @@ export default function AnnouncementDetailPage() {
                 Delete
               </button>
             </div>
+          )
         </div>
       ) : (
         <p>Loading...</p>

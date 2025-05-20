@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
-import { useRouter } from 'next/navigation';
 import StarterKit from '@tiptap/starter-kit';
 import OwnerHeader from "@/components/header/OwnerHeader";
 
 export default function AnnouncementCreate() {
-    const router = useRouter();
     const [title, setTitle] = useState('');
     const [type, setType] = useState<'NOTICE' | 'NORMAL'>('NORMAL');
     const [restaurantId, setRestaurantId] = useState<string | null>(null);
@@ -20,40 +18,25 @@ export default function AnnouncementCreate() {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const id = params.get('restaurantId');
-        const getJwt = (): string | null => {
-            if (typeof window === 'undefined') return null;
-            return localStorage.getItem('jwtToken');
-          };
-        const jwt = getJwt();
-        if (!jwt) {
-            router.push('/auth/owner/login');
-            return;
-        }
         setRestaurantId(id);
     }, []);
 
     const sendContent = async () => {
         const content = editor?.getHTML() || '';
+
         if (!restaurantId) {
             alert('레스토랑 ID가 없습니다. 다시 로그인해주세요.');
             return;
         }
 
-        const getJwt = (): string | null => {
-            if (typeof window === 'undefined') return null;
-            return localStorage.getItem('jwtToken');
-          };
-        const jwt = getJwt();
-        if (!jwt) {
-            router.push('/auth/owner/login');
-            return;
-        }
+        const csrfToken = document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/announcement/save?restaurantId=${restaurantId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${jwt}`,
+                ...(csrfHeader && csrfToken ? { [csrfHeader]: csrfToken } : {}),
             },
             body: JSON.stringify({
                 title,
@@ -70,8 +53,7 @@ export default function AnnouncementCreate() {
         }
     };
     return (
-        <div className='wrapper'>
-            <div className="card p-4">
+        <div className="card p-4">
             <div className="card-body">
                 <form>
                     <div className="mb-3">
@@ -121,6 +103,5 @@ export default function AnnouncementCreate() {
                 </button>
             </div>
         </div>
-    </div>
-);
+    );
 }
