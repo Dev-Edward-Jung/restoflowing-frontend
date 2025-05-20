@@ -110,8 +110,7 @@ export default function AnnouncementUpdatePage() {
     };
 
     return (
-        <div className='wrapper'>
-            <div className="card p-4">
+        <div className="card p-4">
             <div className="card-body">
                 <form>
                     <div className="mb-3">
@@ -159,7 +158,5 @@ export default function AnnouncementUpdatePage() {
                 <button onClick={handleDelete} className="btn btn-danger">Delete</button>
             </div>
         </div>
-        </div>
-        
     );
 }

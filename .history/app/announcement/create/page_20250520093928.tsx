@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import StarterKit from '@tiptap/starter-kit';
 import OwnerHeader from "@/components/header/OwnerHeader";
 
@@ -34,6 +34,7 @@ export default function AnnouncementCreate() {
 
     const sendContent = async () => {
         const content = editor?.getHTML() || '';
+
         if (!restaurantId) {
             alert('레스토랑 ID가 없습니다. 다시 로그인해주세요.');
             return;
@@ -70,8 +71,7 @@ export default function AnnouncementCreate() {
         }
     };
     return (
-        <div className='wrapper'>
-            <div className="card p-4">
+        <div className="card p-4">
             <div className="card-body">
                 <form>
                     <div className="mb-3">
@@ -121,6 +121,5 @@ export default function AnnouncementCreate() {
                 </button>
             </div>
         </div>
-    </div>
-);
+    );
 }

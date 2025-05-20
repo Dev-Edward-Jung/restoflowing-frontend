@@ -94,7 +94,7 @@ export default function AnnouncementUpdatePage() {
 
         const jwt = getJwt();
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/announcement/delete/${id}?restaurantId=${restaurantId}`, {
+        const res = await fetch(`/api/announcement/delete/${id}?restaurantId=${restaurantId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${jwt}`,
@@ -110,8 +110,7 @@ export default function AnnouncementUpdatePage() {
     };
 
     return (
-        <div className='wrapper'>
-            <div className="card p-4">
+        <div className="card p-4">
             <div className="card-body">
                 <form>
                     <div className="mb-3">
@@ -159,7 +158,5 @@ export default function AnnouncementUpdatePage() {
                 <button onClick={handleDelete} className="btn btn-danger">Delete</button>
             </div>
         </div>
-        </div>
-        
     );
 }

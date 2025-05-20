@@ -14,48 +14,31 @@ export default function AnnouncementUpdatePage() {
 
     const [title, setTitle] = useState('');
     const [type, setType] = useState<'NOTICE' | 'NORMAL'>('NORMAL');
+    const [csrfToken, setCsrfToken] = useState('');
+    const [csrfHeader, setCsrfHeader] = useState('');
 
     const editor = useEditor({
         extensions: [StarterKit],
         content: '',
     });
 
-    function getJwt(){
-        try{
-            const getJwt = (): string | null => {
-            if (typeof window === 'undefined') return null;
-            return localStorage.getItem('jwtToken');
-          };
-        const jwt = getJwt();
-        if (!jwt) {
-            router.push('/auth/owner/login');
-            return;
-            }
-    
-            return jwt;
-        }
-        catch{
-            alert(" Something Wrong")
-            router.push("/auth/owner/login")
-        }
-    
-      }
-
+    // Fetch CSRF Meta info
+    useEffect(() => {
+        const token = document.querySelector('meta[name="_csrf"]')?.getAttribute('content') || '';
+        const header = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content') || '';
+        setCsrfToken(token);
+        setCsrfHeader(header);
+    }, []);
 
     // Fetch Announcement Data
     useEffect(() => {
         if (!id || !restaurantId || !editor) return;
-        const jwt = getJwt();
 
         const fetchData = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/announcement/detail/${id}?restaurantId=${restaurantId}`,{
-                headers:{
-                    'Authorization': `Bearer ${jwt}`,
-                }
-            });
+            const res = await fetch(`/api/announcement/detail/${id}?restaurantId=${restaurantId}`);
             if (!res.ok) {
                 alert('Failed to fetch data.');
-                router.push(`/announcement/list?restaurantId=${restaurantId}`);
+                router.push(`/page/announcement/list?restaurantId=${restaurantId}`);
                 return;
             }
 
@@ -70,19 +53,18 @@ export default function AnnouncementUpdatePage() {
 
     const handleUpdate = async () => {
         const content = editor?.getHTML() || '';
-        const jwt = getJwt()
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/announcement/update/${id}?restaurantId=${restaurantId}`, {
+        const res = await fetch(`/api/announcement/update/${id}?restaurantId=${restaurantId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${jwt}`,
+                [csrfHeader]: csrfToken,
             },
             body: JSON.stringify({ title, content, type }),
         });
 
         if (res.ok) {
             alert('Updated successfully!');
-            router.push(`/announcement/detail/${id}?restaurantId=${restaurantId}`);
+            router.push(`/page/announcement/detail/${id}?restaurantId=${restaurantId}`);
         } else {
             alert('Update failed.');
         }
@@ -92,26 +74,23 @@ export default function AnnouncementUpdatePage() {
         const confirmed = confirm('Do you really want to delete this?');
         if (!confirmed) return;
 
-        const jwt = getJwt();
-
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/announcement/delete/${id}?restaurantId=${restaurantId}`, {
+        const res = await fetch(`/api/announcement/delete/${id}?restaurantId=${restaurantId}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': `Bearer ${jwt}`,
+                [csrfHeader]: csrfToken,
             },
         });
 
         if (res.ok) {
             alert('Deleted successfully!');
-            router.push(`/announcement/list?restaurantId=${restaurantId}`);
+            router.push(`/page/announcement/list?restaurantId=${restaurantId}`);
         } else {
             alert('Delete failed.');
         }
     };
 
     return (
-        <div className='wrapper'>
-            <div className="card p-4">
+        <div className="card p-4">
             <div className="card-body">
                 <form>
                     <div className="mb-3">
@@ -159,7 +138,5 @@ export default function AnnouncementUpdatePage() {
                 <button onClick={handleDelete} className="btn btn-danger">Delete</button>
             </div>
         </div>
-        </div>
-        
     );
 }

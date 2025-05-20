@@ -70,8 +70,7 @@ export default function AnnouncementCreate() {
         }
     };
     return (
-        <div className='wrapper'>
-            <div className="card p-4">
+        <div className="card p-4">
             <div className="card-body">
                 <form>
                     <div className="mb-3">
@@ -121,6 +120,5 @@ export default function AnnouncementCreate() {
                 </button>
             </div>
         </div>
-    </div>
-);
+    );
 }
