@@ -39,7 +39,7 @@ export default function EmployeeResetPasswordPage() {
 
         const isEmployee = pathname.includes('/employee');
         const endpoint = isEmployee ? '/api/employee/reset/password' : '/api/owner/reset/password';
-        const redirectUrl = isEmployee ? '/page/employee/login?resetSuccess=true' : '/page/owner/login?resetSuccess=true';
+        const redirectUrl = isEmployee ? '/page/employee/login?resetSuccess=true' : '/auth/owner/login?resetSuccess=true';
 
         try {
             const res = await fetch(`${endpoint}?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}`, {

@@ -13,7 +13,6 @@ export default function EmployeeLogin() {
     const [error, setError] = useState<string | null>(null);
     const [rememberMe, setRememberMe] = useState(false)
 
-
     useEffect(() => {
         const saved = localStorage.getItem('rememberMe') === 'true';
         if (saved) {
