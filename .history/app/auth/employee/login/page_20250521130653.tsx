@@ -6,13 +6,11 @@ import Script from 'next/script';
 import { useRouter } from 'next/navigation';
 
 export default function EmployeeLogin() {
-    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [rememberMe, setRememberMe] = useState(false)
-
 
     useEffect(() => {
         const saved = localStorage.getItem('rememberMe') === 'true';
@@ -81,17 +79,14 @@ export default function EmployeeLogin() {
                             </div>
                             <h4 className="mb-2"><strong>Employee Login</strong></h4>
                             <p className="mb-4">Please sign in to your account</p>
-
-                            {error && <div className="alert alert-danger">{error}</div>}
-
-                            <form method="POST" onClick={handleSubmit} id="formAuthentication">
+                            <form method="POST" action="/auth/employee/login" id="formAuthentication">
                                 <div className="mb-3">
                                     <label htmlFor="email" className="form-label">Email</label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="email"
-                                        name="email"
+                                        name="employeeEmail"
                                         placeholder="Enter your email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
@@ -110,7 +105,7 @@ export default function EmployeeLogin() {
                                             type="password"
                                             id="password"
                                             className="form-control"
-                                            name="password"
+                                            name="employeePassword"
                                             placeholder="********"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}

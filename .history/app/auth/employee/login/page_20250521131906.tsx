@@ -13,7 +13,6 @@ export default function EmployeeLogin() {
     const [error, setError] = useState<string | null>(null);
     const [rememberMe, setRememberMe] = useState(false)
 
-
     useEffect(() => {
         const saved = localStorage.getItem('rememberMe') === 'true';
         if (saved) {
@@ -84,7 +83,7 @@ export default function EmployeeLogin() {
 
                             {error && <div className="alert alert-danger">{error}</div>}
 
-                            <form method="POST" onClick={handleSubmit} id="formAuthentication">
+                            <form method="POST" action="/auth/owner/login" id="formAuthentication">
                                 <div className="mb-3">
                                     <label htmlFor="email" className="form-label">Email</label>
                                     <input

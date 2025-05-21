@@ -99,7 +99,7 @@ export default function OwnerLoginPage() {
                 <div className="mb-3 form-password-toggle">
                   <div className="d-flex justify-content-between">
                     <label htmlFor="password" className="form-label">Password</label>
-                    <a href="/auth/forget"><small>Forgot Password?</small></a>
+                    <a href="/auth/forget/password"><small>Forgot Password?</small></a>
                   </div>
                   <div className="input-group input-group-merge">
                     <input
