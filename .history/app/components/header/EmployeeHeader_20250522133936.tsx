@@ -1,0 +1,111 @@
+'use client';
+
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
+export default function OwnerMenu() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const handleToggle = () => {
+    if (typeof window !== 'undefined' && window.Helpers?.toggleCollapsed) {
+      window.Helpers.toggleCollapsed();
+    } else {
+      console.warn("window.Helpers not available");
+    }
+  };
+
+  useEffect(() => {
+    const restaurantId = searchParams.get("restaurantId");
+
+    if (!restaurantId) {
+      alert("레스토랑 정보가 없습니다. 다시 로그인해주세요.");
+      router.push("/auth/owner/login");
+      return;
+    }
+
+    const links = document.querySelectorAll("a.menu-link");
+    links.forEach(link => {
+      const href = link.getAttribute("href");
+      if (
+        href &&
+        href.startsWith("/") &&
+        !href.startsWith("#") &&
+        !href.includes("restaurantId=")
+      ) {
+        const separator = href.includes("?") ? "&" : "?";
+        const newHref = `${href}${separator}restaurantId=${restaurantId}`;
+        link.setAttribute("href", newHref);
+      }
+    });
+  }, [router, searchParams]);
+
+  return (
+    <>
+      <nav className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+        <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+          <span className="nav-item nav-link px-0 me-xl-4">
+            <button type="button" className="btn btn-icon" onClick={handleToggle}>
+              <i className="bx bx-menu bx-sm"></i>
+            </button>
+          </span>
+        </div>
+        <button
+          type="submit"
+          onClick={() => {
+            localStorage.removeItem('jwtToken');
+            window.location.href = '/auth/owner/login';
+          }}
+          className="btn btn-link"
+          style={{ padding: 0, border: "none", background: "none" }}
+        >
+          <i className="bx bx-log-out"></i>
+          <span className="align-middle">Log Out</span>
+        </button>
+      </nav>
+
+      <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
+        <div className="app-brand demo">
+          <a href="/page/restaurant/list" className="app-brand-link">
+            <img src="/img/logo/logo-gray.png" className="logo-nav" alt="logo" />
+          </a>
+          <a onClick={handleToggle} className="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i className="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+        </div>
+
+        <div className="menu-inner-shadow"></div>
+
+        <ul className="menu-inner py-1">
+          <li className="menu-header small text-uppercase">
+            <span className="menu-header-text">Pages</span>
+          </li>
+
+          <li className="menu-item">
+            <a href="#" className="menu-link menu-toggle">
+              <i className="menu-icon tf-icons bx bx-dock-top"></i>
+              <div data-i18n="Account Settings">My Restaurant</div>
+            </a>
+            <ul className="menu-sub">
+              <li className="menu-item">
+                <a href="/restaurant/list" className="menu-link">
+                  <div data-i18n="Connections">Restaurant List</div>
+                </a>
+              </li>
+              <li className="menu-item">
+                <a href="/announcement/list" className="menu-link">
+                  <div data-i18n="Basic">Announcement</div>
+                </a>
+              </li>
+              <li className="menu-item">
+                <a href="/schedule/list" className="menu-link">
+                  <div data-i18n="Basic">Schedule</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+    </>
+  );
+}
