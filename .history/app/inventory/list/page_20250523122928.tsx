@@ -180,7 +180,7 @@ export default function InventoryPage() {
                         </select>
                         <div className="form-check mt-1">
                             <input className="form-check-input" type="checkbox" value="" id="defaultCheck1" />
-                            <label className="form-check-label" htmlFor="defaultCheck1"> Need This! </label>
+                            <label className="form-check-label" htmlFor="defaultCheck1"> Unchecked </label>
                           </div>
                     </div>
                     <div className="modal-footer">

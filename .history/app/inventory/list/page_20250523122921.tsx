@@ -178,9 +178,10 @@ export default function InventoryPage() {
                         <select className="form-select mb-4" defaultValue={currentItem.categoryId} onChange={e => setCurrentItem(p => ({ ...p, categoryId: e.target.value }))}>
                             {categoryList.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
                         </select>
+                        <span>Need This?</span>
                         <div className="form-check mt-1">
                             <input className="form-check-input" type="checkbox" value="" id="defaultCheck1" />
-                            <label className="form-check-label" htmlFor="defaultCheck1"> Need This! </label>
+                            <label className="form-check-label" htmlFor="defaultCheck1"> Unchecked </label>
                           </div>
                     </div>
                     <div className="modal-footer">

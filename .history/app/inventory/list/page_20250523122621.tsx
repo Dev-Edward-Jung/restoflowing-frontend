@@ -175,13 +175,11 @@ export default function InventoryPage() {
                         <select className="form-select mb-2" defaultValue={currentItem.unit} onChange={e => setCurrentItem(p => ({ ...p, unit: e.target.value }))}>
                             {unitList.map(unit => <option key={unit} value={unit}>{unit}</option>)}
                         </select>
-                        <select className="form-select mb-4" defaultValue={currentItem.categoryId} onChange={e => setCurrentItem(p => ({ ...p, categoryId: e.target.value }))}>
+                        <select className="form-select mb-2" defaultValue={currentItem.categoryId} onChange={e => setCurrentItem(p => ({ ...p, categoryId: e.target.value }))}>
                             {categoryList.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
                         </select>
-                        <div className="form-check mt-1">
-                            <input className="form-check-input" type="checkbox" value="" id="defaultCheck1" />
-                            <label className="form-check-label" htmlFor="defaultCheck1"> Need This! </label>
-                          </div>
+                        <span>Need This?</span>
+                        <input className="form-control mb" type="checkbox" defaultChecked={true} />
                     </div>
                     <div className="modal-footer">
                         <button className="btn btn-outline-danger" onClick={deleteItem} data-bs-dismiss="modal">Delete</button>

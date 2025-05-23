@@ -93,9 +93,9 @@ export default function EmployeeListPage() {
             <div className="card mb-4">
                 <h5 className="card-header">Employee List</h5>
                 <div className="card-body">
-                    <div className="employee-list list-view mt-2 flex-wrap">
+                    <div className="employee-list list-view mt-2">
                         {employees.map((emp) => (
-                            <div key={emp.id} className="border p-3 mb-2 rounded bg-light m-1">
+                            <div key={emp.id} className="border p-3 mb-3 rounded bg-light m-1">
                                 <input className="form-control form-control-lg large-input mb-2" disabled value={emp.name} />
                                 <input className="form-control form-control-lg large-input mb-2" disabled value={emp.email} />
                                 <input className="form-control form-control-lg large-input mb-2" disabled value={emp.memberRole} />
