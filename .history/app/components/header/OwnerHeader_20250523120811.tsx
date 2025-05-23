@@ -60,7 +60,7 @@ export default function OwnerMenu() {
           </span>
         </div>
 
-        <a href="/account" className="menu-link">My Account</a>
+        <a href="/account" className="menu-link">Account</a>
 
         {/* <button
           type="submit"

@@ -60,9 +60,15 @@ export default function OwnerMenu() {
           </span>
         </div>
 
-        <a href="/account" className="menu-link">My Account</a>
+        <button
+          type="submit"
+          className="btn btn-link"
+        >
+          <i className="bx bx-log-out"></i>
+          <span className="align-middle">My Account</span>
+        </button>
 
-        {/* <button
+        <button
           type="submit"
           onClick={() => {
             localStorage.removeItem('jwtToken');
@@ -73,7 +79,7 @@ export default function OwnerMenu() {
         >
           <i className="bx bx-log-out"></i>
           <span className="align-middle">Log Out</span>
-        </button> */}
+        </button>
       </nav>
 
       <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
