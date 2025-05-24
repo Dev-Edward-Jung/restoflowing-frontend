@@ -47,8 +47,8 @@ export default function RestaurantPage() {
         }
         console.log(res)
         const data = await res.json();
+        console.log(data)
         setRestaurants(data);
-        setLoading(false)
 
         
       } catch (err) {

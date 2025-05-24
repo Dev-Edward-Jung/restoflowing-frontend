@@ -46,11 +46,8 @@ export default function PayrollDashboard() {
                     'Authorization': `Bearer ${jwt}`,
                   },
             });
-
-            console.log(res)
         }
 
-        fetchPayroll();
     })
 
 

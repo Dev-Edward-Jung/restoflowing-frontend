@@ -34,6 +34,7 @@ export default function RestaurantPage() {
         router.push('/auth/owner/login');
         return;
     }
+    console.log(jwt)
 
     const fetchRestaurant = async () => {
       try {
@@ -42,13 +43,15 @@ export default function RestaurantPage() {
             'Authorization': `Bearer ${jwt}`,
           },
         });
+        if(res.ok){
+            console.log("okay?")
+        }
         if (!res.ok) {
             throw new Error('Failed to load restaurant');
         }
-        console.log(res)
         const data = await res.json();
+        console.log(data)
         setRestaurants(data);
-        setLoading(false)
 
         
       } catch (err) {

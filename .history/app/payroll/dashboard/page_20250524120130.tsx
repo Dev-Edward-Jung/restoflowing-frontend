@@ -50,7 +50,6 @@ export default function PayrollDashboard() {
             console.log(res)
         }
 
-        fetchPayroll();
     })
 
 

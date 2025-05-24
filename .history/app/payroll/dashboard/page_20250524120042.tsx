@@ -41,16 +41,14 @@ export default function PayrollDashboard() {
         }
 
         const fetchPayroll = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payroll/list?restaurantId=${restaurantId}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/list?restaurantId=${restaurantId}`, {
                 headers: {
                     'Authorization': `Bearer ${jwt}`,
                   },
+                
             });
-
-            console.log(res)
         }
 
-        fetchPayroll();
     })
 
 

@@ -19,46 +19,43 @@ export default function RestaurantPage() {
   const [name, setName] = useState('');
   const [city, setCity] = useState('');
   const { memberId, memberRole, memberEmail } = useUser();
-  const [jwt, setJwt] = useState<string | null>(null);
-  
 
   const getJwt = (): string | null => {
     if (typeof window === 'undefined') return null;
     return localStorage.getItem('jwtToken');
   };
 
-
+  // 리스트 불러오기
   useEffect(() => {
     const jwt = getJwt();
     if (!jwt) {
-        router.push('/auth/owner/login');
-        return;
+      router.push('/auth/owner/login');
+      return;
     }
 
-    const fetchRestaurant = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/restaurant/list`, {
-          headers: {
-            'Authorization': `Bearer ${jwt}`,
-          },
-        });
-        if (!res.ok) {
-            throw new Error('Failed to load restaurant');
-        }
-        console.log(res)
-        const data = await res.json();
-        setRestaurants(data);
-        setLoading(false)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/restaurant/list`, {
+      headers: {
+        'Authorization': `Bearer ${jwt}`,
+        'Accept': 'application/json',
+      },
+    })
+      .then(res => {
 
-        
-      } catch (err) {
-        alert('Failed to fetch restaurant.');
-        console.error(err);
-      }
-    };
-  
-    fetchRestaurant();
-  }, [router, jwt]);
+        console.log(res)
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((restaurantList: Restaurant[]) => {
+        console.log(restaurantList);       // ← now you’ll see your array
+        setRestaurants(restaurantList); 
+      })
+      .catch(err => {
+        console.error('Failed to load restaurants', err);
+      })
+      .finally(() => setLoading(false));
+  }, [router]);
 
   // 새로운 레스토랑 저장
   const handleSave = async () => {

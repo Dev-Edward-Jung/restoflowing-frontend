@@ -9,14 +9,6 @@ import { useSearchParams, useRouter } from 'next/navigation';
 export default function PayrollDashboard() {
     const [name, setName] = useState('')
     const [hourlyWage, setHourlyWage] = useState('');
-    const router = useRouter()
-    const searchParams = useSearchParams();
-    const restaurantId = searchParams.get('restaurantId');
-
-    const getJwt = (): string | null => {
-        if (typeof window === 'undefined') return null;
-        return localStorage.getItem('jwtToken');
-      };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -31,26 +23,15 @@ export default function PayrollDashboard() {
 
 
     useEffect(() => {
-
-        if (!restaurantId) return;
-
-        const jwt = getJwt();
-        if (!jwt) {
-            router.push('/auth/owner/login');
-            return;
-        }
-
         const fetchPayroll = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payroll/list?restaurantId=${restaurantId}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/list?restaurantId=${restaurantId}`, {
                 headers: {
                     'Authorization': `Bearer ${jwt}`,
                   },
+                
             });
-
-            console.log(res)
         }
 
-        fetchPayroll();
     })
 
 

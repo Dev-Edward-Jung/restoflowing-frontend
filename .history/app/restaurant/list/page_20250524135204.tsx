@@ -20,35 +20,39 @@ export default function RestaurantPage() {
   const [city, setCity] = useState('');
   const { memberId, memberRole, memberEmail } = useUser();
   const [jwt, setJwt] = useState<string | null>(null);
-  
-
-  const getJwt = (): string | null => {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem('jwtToken');
-  };
 
 
   useEffect(() => {
-    const jwt = getJwt();
-    if (!jwt) {
-        router.push('/auth/owner/login');
-        return;
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      router.push('/auth/owner/login');
+      return;
     }
+    console.log(token)
+    setJwt(token);
+  }, [router]);
+
+
+  useEffect(() => {
+    
 
     const fetchRestaurant = async () => {
       try {
+        console.log(jwt)
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/restaurant/list`, {
           headers: {
             'Authorization': `Bearer ${jwt}`,
           },
         });
+        if(res.ok){
+            console.log("okay?")
+        }
         if (!res.ok) {
             throw new Error('Failed to load restaurant');
         }
-        console.log(res)
         const data = await res.json();
+        console.log(data)
         setRestaurants(data);
-        setLoading(false)
 
         
       } catch (err) {

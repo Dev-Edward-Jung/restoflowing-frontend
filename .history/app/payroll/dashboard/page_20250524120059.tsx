@@ -45,12 +45,10 @@ export default function PayrollDashboard() {
                 headers: {
                     'Authorization': `Bearer ${jwt}`,
                   },
+                
             });
-
-            console.log(res)
         }
 
-        fetchPayroll();
     })
 
 

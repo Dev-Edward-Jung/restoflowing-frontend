@@ -19,46 +19,47 @@ export default function RestaurantPage() {
   const [name, setName] = useState('');
   const [city, setCity] = useState('');
   const { memberId, memberRole, memberEmail } = useUser();
-  const [jwt, setJwt] = useState<string | null>(null);
-  
 
   const getJwt = (): string | null => {
     if (typeof window === 'undefined') return null;
     return localStorage.getItem('jwtToken');
   };
 
-
+  // 리스트 불러오기
   useEffect(() => {
     const jwt = getJwt();
     if (!jwt) {
-        router.push('/auth/owner/login');
-        return;
+      router.push('/auth/owner/login');
+      return;
     }
 
-    const fetchRestaurant = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/restaurant/list`, {
-          headers: {
-            'Authorization': `Bearer ${jwt}`,
-          },
-        });
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/restaurant/list`, {
+      headers: {
+        'Authorization': `Bearer ${jwt}`,
+      },
+    })
+      .then(async (res) => {
+        const contentType = res.headers.get('content-type');
+    
         if (!res.ok) {
-            throw new Error('Failed to load restaurant');
+          const errorText = await res.text(); // ← 안전하게 텍스트로 받기
+          throw new Error(`HTTP ${res.status}: ${errorText}`);
         }
-        console.log(res)
-        const data = await res.json();
-        setRestaurants(data);
-        setLoading(false)
-
-        
-      } catch (err) {
-        alert('Failed to fetch restaurant.');
-        console.error(err);
-      }
-    };
-  
-    fetchRestaurant();
-  }, [router, jwt]);
+    
+        if (contentType && contentType.includes('application/json')) {
+          return res.json();
+        } else {
+          throw new Error('Invalid JSON response');
+        }
+      })
+      .then((restaurantList: Restaurant[]) => {
+        console.log(restaurantList);
+        setRestaurants(restaurantList);
+      })
+      .catch(err => {
+        console.error('Failed to load restaurants', err);
+      })
+      .finally(() => setLoading(false));
 
   // 새로운 레스토랑 저장
   const handleSave = async () => {
