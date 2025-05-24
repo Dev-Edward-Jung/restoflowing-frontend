@@ -5,53 +5,20 @@ import { useSearchParams, useRouter } from 'next/navigation';
 
 
 
-
 export default function PayrollDashboard() {
     const [name, setName] = useState('')
-    const [hourlyWage, setHourlyWage] = useState('');
-    const router = useRouter()
-    const searchParams = useSearchParams();
-    const restaurantId = searchParams.get('restaurantId');
+    const [hourlyWage, setHourlyWage] = useState<number>(0);
 
-    const getJwt = (): string | null => {
-        if (typeof window === 'undefined') return null;
-        return localStorage.getItem('jwtToken');
-      };
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const value = e.target.value;
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-      
-        // 숫자 또는 소수점 2자리까지 허용
-        const isValid = /^(\d+)?(\.\d{0,2})?$/.test(value);
-      
-        if (isValid || value === '') {
-          setHourlyWage(value);
-        }
-      };
+  // 숫자와 소수점 2자리까지만 허용하는 정규식
+  const isValid = /^(\d+(\.\d{0,2})?)?$/.test(value);
 
-
-    useEffect(() => {
-
-        if (!restaurantId) return;
-
-        const jwt = getJwt();
-        if (!jwt) {
-            router.push('/auth/owner/login');
-            return;
-        }
-
-        const fetchPayroll = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payroll/list?restaurantId=${restaurantId}`, {
-                headers: {
-                    'Authorization': `Bearer ${jwt}`,
-                  },
-            });
-
-            console.log(res)
-        }
-
-        fetchPayroll();
-    })
+  if (isValid) {
+    setHourlyWage(value === '' ? 0 : parseFloat(value));
+  }
+};
 
 
 
@@ -108,31 +75,19 @@ export default function PayrollDashboard() {
                                                 <label className="form-label">Hourly Wage ($)</label>
                                                     <input
                                                     className="form-control nameInput"
+                                                    name="wage"
+                                                    placeholder="16.5"
                                                     inputMode="decimal"
-                                                    placeholder="15.75"
-                                                    value={hourlyWage}
-                                                    onKeyDown={(e) => {
-                                                      const allowedKeys = [
-                                                        'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'
-                                                      ];
-                                                  
-                                                      const isNumber = /^[0-9]$/.test(e.key);
-                                                      const isDot = e.key === '.';
-                                                  
-                                                      const value = e.currentTarget.value;
-                                                  
-                                                      // ✅ 소수점은 1번만 허용
-                                                      if (isDot && value.includes('.')) {
-                                                        e.preventDefault();
-                                                      }
-                                                  
-                                                      // ✅ 숫자, 소수점, 기본 키 허용
-                                                      if (!isNumber && !isDot && !allowedKeys.includes(e.key)) {
-                                                        e.preventDefault();
-                                                      }
-                                                    }}
+                                                    type="text"
+                                                    value={hourlyWage.toString()}
                                                     onChange={handleInputChange}
-                                                  />
+                                                    onKeyDown={(e) => {
+                                                        // 허용할 키만 허용 (숫자, 백스페이스, delete, 방향키, 소수점)
+                                                        const allowed = /^[0-9.]$/.test(e.key) || ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'].includes(e.key);
+                                                        if (!allowed) e.preventDefault();
+                                                      }}
+                                                    
+                                                />
                                                 
                                             </div>
 

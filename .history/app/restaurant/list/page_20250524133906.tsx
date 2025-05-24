@@ -27,38 +27,34 @@ export default function RestaurantPage() {
     return localStorage.getItem('jwtToken');
   };
 
-
   useEffect(() => {
-    const jwt = getJwt();
-    if (!jwt) {
-        router.push('/auth/owner/login');
-        return;
-    }
-
-    const fetchRestaurant = async () => {
+  
+    const fetchEmployees = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/restaurant/list`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/employee/list?restaurantId=${restaurantId}`, {
           headers: {
             'Authorization': `Bearer ${jwt}`,
           },
         });
-        if (!res.ok) {
-            throw new Error('Failed to load restaurant');
+        if(res.ok){
+            console.log("okay?")
         }
-        console.log(res)
+        if (!res.ok) {
+            throw new Error('Failed to load employees');
+        }
         const data = await res.json();
-        setRestaurants(data);
-        setLoading(false)
+        console.log(data)
+        setEmployees(data);
 
         
       } catch (err) {
-        alert('Failed to fetch restaurant.');
+        alert('Failed to fetch employees.');
         console.error(err);
       }
     };
   
-    fetchRestaurant();
-  }, [router, jwt]);
+    fetchEmployees();
+  }, [restaurantId, jwt]);
 
   // 새로운 레스토랑 저장
   const handleSave = async () => {

@@ -100,7 +100,7 @@ export default function EmployeeListPage() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${jwt}`
              },
-            body: JSON.stringify({ name, email, restaurantId, hourlyWage, memberRole: memberRole }),
+            body: JSON.stringify({ name, email, restaurantId, memberRole: memberRole }),
         });
 
         if (res.ok) {

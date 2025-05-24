@@ -47,8 +47,8 @@ export default function RestaurantPage() {
         }
         console.log(res)
         const data = await res.json();
+        console.log(data)
         setRestaurants(data);
-        setLoading(false)
 
         
       } catch (err) {
@@ -58,7 +58,7 @@ export default function RestaurantPage() {
     };
   
     fetchRestaurant();
-  }, [router, jwt]);
+  }, [router, jwt, restaurants]);
 
   // 새로운 레스토랑 저장
   const handleSave = async () => {

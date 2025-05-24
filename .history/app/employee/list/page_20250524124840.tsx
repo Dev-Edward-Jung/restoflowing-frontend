@@ -17,34 +17,11 @@ export default function EmployeeListPage() {
     const [email, setEmail] = useState('');
     const [emailConfirm, setEmailConfirm] = useState('');
     const [memberRole, setRole] = useState('');
-    const [hourlyWage, setHourlyWage] = useState('');
-
     const [jwt, setJwt] = useState<string | null>(null);
-
-    const isFormValid =
-         name.trim() !== '' &&
-         email.trim() !== '' &&
-        email === emailConfirm &&
-        memberRole !== '' &&
-        /^(\d+)?(\.\d{0,2})?$/.test(hourlyWage) && // 시급 숫자 검사
-        hourlyWage.trim() !== '';
 
 
     const params = useSearchParams();
     const restaurantId = params.get('restaurantId');
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-      
-        // 숫자 또는 소수점 2자리까지 허용
-        const isValid = /^(\d+)?(\.\d{0,2})?$/.test(value);
-      
-        if (isValid || value === '') {
-          setHourlyWage(value);
-        }
-      };
-
-
 
     useEffect(() => {
         const token = localStorage.getItem("jwtToken");
@@ -100,7 +77,7 @@ export default function EmployeeListPage() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${jwt}`
              },
-            body: JSON.stringify({ name, email, restaurantId, hourlyWage, memberRole: memberRole }),
+            body: JSON.stringify({ name, email, restaurantId, memberRole: memberRole }),
         });
 
         if (res.ok) {
@@ -223,15 +200,9 @@ export default function EmployeeListPage() {
                                     </div>
                                 </div>
                                 <div className="modal-footer">
-                                <button
-                                    className="btn btn-primary addBtn"
-                                    data-bs-dismiss={isFormValid ? "modal" : undefined}
-                                    type="button"
-                                    onClick={inviteEmployee}
-                                    disabled={!isFormValid}
-                                    >
-                                    Send Invitation
-                                </button>
+                                    <button className="btn btn-primary addBtn" data-bs-dismiss="modal" type="button" onClick={inviteEmployee}>
+                                        Send Invitation
+                                    </button>
                                 </div>
                             </div>
                         </div>
