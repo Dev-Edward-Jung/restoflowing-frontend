@@ -52,32 +52,6 @@ export default function PayrollDashboard() {
             
         }
 
-        const updatePayroll = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payroll/list?restaurantId=${restaurantId}`, {
-                headers: {
-                    'Authorization': `Bearer ${jwt}`,
-                  },
-            });
-
-            const json = await res.json()
-            const data = json.data;
-            setEmployeeList(data)
-            
-        }
-
-        const deletePayroll = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payroll/list?restaurantId=${restaurantId}`, {
-                headers: {
-                    'Authorization': `Bearer ${jwt}`,
-                  },
-            });
-
-            const json = await res.json()
-            const data = json.data;
-            setEmployeeList(data)
-            
-        }
-
         fetchPayroll();
 
     },[restaurantId])

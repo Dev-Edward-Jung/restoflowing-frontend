@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/UserContext';
 import { json } from 'stream/consumers';
+import { Modal } from 'bootstrap';
 
 interface Restaurant {
   id: number;

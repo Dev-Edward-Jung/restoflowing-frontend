@@ -52,32 +52,6 @@ export default function PayrollDashboard() {
             
         }
 
-        const updatePayroll = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payroll/list?restaurantId=${restaurantId}`, {
-                headers: {
-                    'Authorization': `Bearer ${jwt}`,
-                  },
-            });
-
-            const json = await res.json()
-            const data = json.data;
-            setEmployeeList(data)
-            
-        }
-
-        const deletePayroll = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payroll/list?restaurantId=${restaurantId}`, {
-                headers: {
-                    'Authorization': `Bearer ${jwt}`,
-                  },
-            });
-
-            const json = await res.json()
-            const data = json.data;
-            setEmployeeList(data)
-            
-        }
-
         fetchPayroll();
 
     },[restaurantId])
@@ -108,8 +82,25 @@ export default function PayrollDashboard() {
                                 </button>
 
                             </div>
-                            </div>
                         ))}
+
+                    
+                            <div className="border p-3 mb-3 rounded bg-light m-2">
+                                <span>Name</span><input className="form-control form-control-lg large-input mb-2" disabled  />
+                                <span>Hourly Wage ($)</span><input className="form-control form-control-lg large-input mb-2" disabled  />
+                                <span>Total Wage ($)</span><input className="form-control form-control-lg large-input mb-2" disabled  />
+                                <div className="text-end mt-3">
+                                    <button
+                                        className="btn btn-primary me-2"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalCenterAdd"
+                                    >
+                                        EDIT
+                                    </button>
+
+                                </div>
+                            </div>
 
 
                              {/* Modal */}
