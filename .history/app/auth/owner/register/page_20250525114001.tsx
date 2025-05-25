@@ -70,6 +70,7 @@ export default function OwnerRegisterPage() {
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
+                    [headerName]: token,
                 },
                 body: JSON.stringify(form),
             });

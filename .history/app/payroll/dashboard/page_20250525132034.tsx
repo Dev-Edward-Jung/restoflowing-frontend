@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from 'next/navigation';
 
 
 export default function PayrollDashboard() {
-    const [employeeList, setEmployeeList] = useState([])
     const [name, setName] = useState('')
     const [hourlyWage, setHourlyWage] = useState('');
     const router = useRouter()
@@ -46,41 +45,12 @@ export default function PayrollDashboard() {
                   },
             });
 
-            const json = await res.json()
-            const data = json.data;
-            setEmployeeList(data)
-            
-        }
-
-        const updatePayroll = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payroll/list?restaurantId=${restaurantId}`, {
-                headers: {
-                    'Authorization': `Bearer ${jwt}`,
-                  },
-            });
-
-            const json = await res.json()
-            const data = json.data;
-            setEmployeeList(data)
-            
-        }
-
-        const deletePayroll = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payroll/list?restaurantId=${restaurantId}`, {
-                headers: {
-                    'Authorization': `Bearer ${jwt}`,
-                  },
-            });
-
-            const json = await res.json()
-            const data = json.data;
-            setEmployeeList(data)
-            
+            const json = res.json()
+            const data = setP
         }
 
         fetchPayroll();
-
-    },[restaurantId])
+    })
 
 
 
@@ -92,24 +62,24 @@ export default function PayrollDashboard() {
                 <h5 className="card-header">Manage Your Payroll</h5>
                 <div className="card-body">
                     <div className="list-view mt-2 flex-wrap">
-                    {employeeList.map((emp) => (
-                            <div key={emp.id} className="border p-3 mb-3 rounded bg-light m-2">
-                            <span>Name</span><input className="form-control form-control-lg large-input mb-2" disabled value={emp.name}  />
-                            <span>Hourly Wage ($)</span><input className="form-control form-control-lg large-input mb-2" disabled value={emp.hourlyWage}  />
-                            <span>Total Wage ($)</span><input className="form-control form-control-lg large-input mb-2" disabled/>
-                            <div className="text-end mt-3">
-                                <button
-                                    className="btn btn-primary me-2"
-                                    type="button"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalCenterAdd"
-                                >
-                                    EDIT
-                                </button>
 
+                    
+                            <div className="border p-3 mb-3 rounded bg-light m-2">
+                                <span>Name</span><input className="form-control form-control-lg large-input mb-2" disabled  />
+                                <span>Hourly Wage ($)</span><input className="form-control form-control-lg large-input mb-2" disabled  />
+                                <span>Total Wage ($)</span><input className="form-control form-control-lg large-input mb-2" disabled  />
+                                <div className="text-end mt-3">
+                                    <button
+                                        className="btn btn-primary me-2"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalCenterAdd"
+                                    >
+                                        EDIT
+                                    </button>
+
+                                </div>
                             </div>
-                            </div>
-                        ))}
 
 
                              {/* Modal */}

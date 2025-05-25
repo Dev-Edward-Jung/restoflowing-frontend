@@ -33,8 +33,6 @@ export default function InventoryPage() {
             return;
         }
 
-    
-
         const fetchData = async () => {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/list?restaurantId=${restaurantId}`, {
                 headers: {
@@ -60,73 +58,57 @@ export default function InventoryPage() {
 
         fetchData();
     }, [restaurantId]);
+
     const updateItem = async () => {
         const jwt = getJwt();
-        if (!jwt || !currentItem) return;
-      
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/update`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${jwt}`,
-          },
-          body: JSON.stringify({ ...currentItem, restaurantId }),
-        });
-      
-        if (res.ok) {
-          const updated = await res.json(); // ← 서버가 수정된 item 내려줘야 함
-          setInventoryList(prev =>
-            prev.map(item => item.id === updated.id ? updated : item) // ✅ 수정된 item만 갱신
-          );
+        if (!jwt) {
+            router.push('/auth/owner/login');
+            return;
         }
-      };
+        if (!currentItem) return;
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/update`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwt}`,
+            },
+            body: JSON.stringify({ ...currentItem, restaurantId })
+        });
+        location.reload();
+    };
 
-      const deleteItem = async () => {
+    const deleteItem = async () => {
         const jwt = getJwt();
-        if (!jwt || !currentItem) return;
-      
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/delete`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${jwt}`
-          },
-          body: JSON.stringify({ id: currentItem.id, restaurantId })
-        });
-      
-        if (res.ok) {
-          setInventoryList(prev =>
-            prev.filter(item => item.id !== currentItem.id) // ✅ 삭제된 항목만 제거
-          );
-          setCurrentItem(null);
+        if (!jwt) {
+            router.push('/auth/owner/login');
+            return;
         }
-      };
+        if (!currentItem) return;
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/delete`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwt}`
+            },
+            body: JSON.stringify({ id: currentItem.id, restaurantId })
+        });
+    };
 
     const addItem = async () => {
         const jwt = getJwt();
         if (!jwt) {
-          router.push('/auth/owner/login');
-          return;
+            router.push('/auth/owner/login');
+            return;
         }
-      
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/save`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${jwt}`,
-          },
-          body: JSON.stringify({ ...newItem, restaurantId }),
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/save`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwt}`,
+            },
+            body: JSON.stringify({ ...newItem, restaurantId })
         });
-      
-        if (res.ok) {
-          const json = await res.json();
-          const saved = json.data;
-          setInventoryList(prev => [...prev, saved]); // ✅ 자동으로 리스트에 추가
-          setNewItem({ name: '', quantity: '', unit: '', categoryId: '' }); // 폼 초기화
-        } else {
-          alert('Failed to save inventory item');
-        }
-      };
+    };
 
     return (
         <div className='wrapper'>

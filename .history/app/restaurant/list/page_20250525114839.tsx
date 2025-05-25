@@ -69,7 +69,7 @@ export default function RestaurantPage() {
       return;
     }
     if (!name.trim() || !city.trim()) return;
-  
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/restaurant/save`,
       {
@@ -81,29 +81,17 @@ export default function RestaurantPage() {
         body: JSON.stringify({ restaurantName: name.trim(), restaurantCity: city.trim() }),
       }
     );
-  
+
     if (res.ok) {
       const saved = await res.json();
-      console.log(saved);
       setRestaurants(prev => [...prev, saved]);
       setName('');
       setCity('');
-  
-      // 모달 닫기 (JS로)
+      // 모달 닫기 (Bootstrap JS 필요)
       const modalEl = document.getElementById('modalCenter1');
-      if (modalEl) {
-        modalEl.classList.remove('show');
-        modalEl.setAttribute('aria-hidden', 'true');
-        modalEl.removeAttribute('style');
-  
-        // ✅ 수동으로 backdrop 제거
-        const backdrop = document.querySelector('.modal-backdrop');
-        backdrop?.remove();
-  
-        // ✅ 스크롤 복원
-        document.body.classList.remove('modal-open');
-        document.body.style.overflow = '';
-      }
+      modalEl?.classList.remove('show');
+      modalEl?.setAttribute('aria-hidden', 'true');
+      modalEl?.removeAttribute('style');
     } else if (res.status === 401) {
       localStorage.removeItem('jwtToken');
       router.push('/auth/owner/login');

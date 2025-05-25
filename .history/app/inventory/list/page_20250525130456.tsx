@@ -120,7 +120,6 @@ export default function InventoryPage() {
       
         if (res.ok) {
           const json = await res.json();
-          const saved = json.data;
           setInventoryList(prev => [...prev, saved]); // ✅ 자동으로 리스트에 추가
           setNewItem({ name: '', quantity: '', unit: '', categoryId: '' }); // 폼 초기화
         } else {
