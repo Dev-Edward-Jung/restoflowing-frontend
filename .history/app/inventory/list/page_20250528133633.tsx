@@ -149,7 +149,7 @@ const InventoryPage = () => {
                 <select className={`form-select ${item.needNow ? 'alert-danger' : ''}`} disabled defaultValue={item.unit}>
                   <option>{item.unit}</option>
                 </select>
-                <button className={`${item.needNow ? 'btn btn-danger' : 'btn btn-primary'}`} onClick={() => setCurrentItem(item)} data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+                <button className={`btn btn-primary ${item.needNow ? 'alert-danger alert' : ''}`} onClick={() => setCurrentItem(item)} data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
               </div>
             ))}
           </div>

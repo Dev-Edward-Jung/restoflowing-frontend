@@ -3,17 +3,17 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
-interface Employee {
-  id: number;
-  name: string;
-  hourlyWage: string;
-  totalWage: string | null;
-}
+
 
 export default function PayrollDashboard() {
-  const [employeeList, setEmployeeList] = useState<Employee[]>([]);
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
-
+    interface Employee {
+        id: number;
+        name: string;
+        hourlyWage: string;
+        totalWage: string;
+      }
+      const [employeeList, setEmployeeList] = useState<Employee[]>([]);
+  const [selectedEmployee, setSelectedEmployee] = useState<any | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const restaurantId = searchParams.get('restaurantId');
@@ -39,13 +39,7 @@ export default function PayrollDashboard() {
       });
 
       const json = await res.json();
-      const data = json.data;
-
-      if (Array.isArray(data)) {
-        setEmployeeList(data);
-      } else {
-        console.error("Invalid payroll data:", data);
-      }
+      setEmployeeList(json.data);
     };
 
     fetchPayroll();
@@ -53,30 +47,43 @@ export default function PayrollDashboard() {
 
   const updatePayroll = async () => {
     if (!selectedEmployee) return;
-
     const jwt = getJwt();
     if (!jwt) {
       router.push('/auth/owner/login');
       return;
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payroll/update?restaurantId=${restaurantId}`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(selectedEmployee),
-    });
-
-    const json = await res.json();
-    const updated: Employee = json.data;
-
-    // 해당 직원만 업데이트
-    setEmployeeList((prevList) =>
-      prevList.map((emp) => (emp.id === updated.id ? updated : emp))
-    );
-  };
+    const updatePayroll = async () => {
+        if (!selectedEmployee) return;
+      
+        const jwt = getJwt();
+        if (!jwt) {
+          router.push('/auth/owner/login');
+          return;
+        }
+      
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payroll/update?restaurantId=${restaurantId}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${jwt}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: selectedEmployee.id,
+            name: selectedEmployee.name,
+            hourlyWage: selectedEmployee.hourlyWage,
+            totalWage: selectedEmployee.totalWage,
+          }),
+        });
+      
+        const json = await res.json();
+        const updated = json.data; // 👈 직원 한 명만 반환됨
+      
+        // ✅ employeeList 내 해당 직원만 교체
+        setEmployeeList((prevList) =>
+          prevList.map((emp) => (emp.id === updated.id ? updated : emp))
+        );
+      };
 
   return (
     <div className="container-lg p-4">
@@ -91,7 +98,7 @@ export default function PayrollDashboard() {
                 <span>Hourly Wage ($)</span>
                 <input className="form-control mb-2" disabled value={emp.hourlyWage} />
                 <span>Total Wage ($)</span>
-                <input className="form-control mb-2" disabled value={emp.totalWage ?? ''} />
+                <input className="form-control mb-2" disabled value={emp.totalWage ?? '' } />
                 <div className="text-end mt-3">
                   <button
                     className="btn btn-primary me-2"
@@ -122,10 +129,12 @@ export default function PayrollDashboard() {
                         type="text"
                         value={selectedEmployee?.name || ''}
                         onChange={(e) =>
-                          setSelectedEmployee((prev) =>
-                            prev ? { ...prev, name: e.target.value } : null
-                          )
+                          setSelectedEmployee({
+                            ...selectedEmployee,
+                            name: e.target.value,
+                          })
                         }
+                        disabled
                       />
                     </div>
 
@@ -136,9 +145,10 @@ export default function PayrollDashboard() {
                         inputMode="decimal"
                         value={selectedEmployee?.hourlyWage || ''}
                         onChange={(e) =>
-                          setSelectedEmployee((prev) =>
-                            prev ? { ...prev, hourlyWage: e.target.value } : null
-                          )
+                          setSelectedEmployee({
+                            ...selectedEmployee,
+                            hourlyWage: e.target.value,
+                          })
                         }
                       />
                     </div>
@@ -150,9 +160,10 @@ export default function PayrollDashboard() {
                         inputMode="decimal"
                         value={selectedEmployee?.totalWage || ''}
                         onChange={(e) =>
-                          setSelectedEmployee((prev) =>
-                            prev ? { ...prev, totalWage: e.target.value } : null
-                          )
+                          setSelectedEmployee({
+                            ...selectedEmployee,
+                            totalWage: e.target.value,
+                          })
                         }
                       />
                     </div>

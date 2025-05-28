@@ -11,7 +11,7 @@ interface InventoryItem {
   unit: string;
   categoryId: number;
   categoryName?: string;
-  needNow?: boolean;
+  needed?: boolean;
 }
 
 interface Category {
@@ -28,7 +28,7 @@ const InventoryPage = () => {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [unitList, setUnitList] = useState<string[]>([]);
   const [currentItem, setCurrentItem] = useState<InventoryItem | null>(null);
-  const [newItem, setNewItem] = useState<Partial<InventoryItem>>({ name: '', quantity: 0, unit: '', categoryId: 0, needNow: false });
+  const [newItem, setNewItem] = useState<Partial<InventoryItem>>({ name: '', quantity: 0, unit: '', categoryId: 0, needed: false });
 
   const getJwt = (): string | null => {
     if (typeof window === 'undefined') return null;
@@ -82,7 +82,7 @@ const InventoryPage = () => {
       const json = await res.json();
       const saved = json.data;
       setInventoryList(prev => [...prev, saved]);
-      setNewItem({ name: '', quantity: 0, unit: '', categoryId: 0, needNow: false });
+      setNewItem({ name: '', quantity: 0, unit: '', categoryId: 0, needed: false });
     } else {
       alert('Failed to save inventory item');
     }
@@ -98,20 +98,19 @@ const InventoryPage = () => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${jwt}`,
       },
-      body: JSON.stringify({ ...currentItem, restaurantId, needNow: currentItem.needNow ?? false }),
+      body: JSON.stringify({ ...currentItem, restaurantId, needed: currentItem.needed ?? false }),
     });
 
     if (res.ok) {
       const updated = await res.json();
       const data = updated.data;
-      console.log(data)
-      setInventoryList(prev => prev.map(item => item.id === data.id ? data : item));
+      setInventoryList(prev => prev.map(item => item.id === updated.id ? updated : item));
     }
   };
 
   const deleteItem = async () => {
     const jwt = getJwt();
-    if (!jwt || !currentItem) return;item
+    if (!jwt || !currentItem) return;
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/delete`, {
       method: 'DELETE',
@@ -143,13 +142,13 @@ const InventoryPage = () => {
           <div key={category}>
             <h5>{category}</h5>
             {items.map(item => (
-              <div key={item.id} className={`d-flex gap-2 mb-2 align-items-center ${item.needNow ? 'alert-danger' : ''}`}>
-                <input className={`form-control ${item.needNow ? 'alert-danger' : ''}`} disabled value={item.name} />
-                <input className={`form-control ${item.needNow ? 'alert-danger' : ''}`} disabled value={item.name} type="number" />
-                <select className={`form-select ${item.needNow ? 'alert-danger' : ''}`} disabled defaultValue={item.unit}>
+              <div key={item.id} className="d-flex gap-2 mb-2 align-items-center">
+                <input className="form-control" disabled value={item.name} />
+                <input className="form-control" disabled value={item.quantity} type="number" />
+                <select className="form-select" disabled defaultValue={item.unit}>
                   <option>{item.unit}</option>
                 </select>
-                <button className={`${item.needNow ? 'btn btn-danger' : 'btn btn-primary'}`} onClick={() => setCurrentItem(item)} data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+                <button className="btn btn-primary" onClick={() => setCurrentItem(item)} data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
               </div>
             ))}
           </div>
@@ -171,7 +170,7 @@ const InventoryPage = () => {
                   {categoryList.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
                 </select>
                 <div className="form-check mt-1">
-                  <input className="form-check-input" type="checkbox" checked={newItem.needNow || false} onChange={e => setNewItem(p => ({ ...p, needNow: e.target.checked }))} id="addCheck" />
+                  <input className="form-check-input" type="checkbox" checked={newItem.needed || false} onChange={e => setNewItem(p => ({ ...p, needed: e.target.checked }))} id="addCheck" />
                   <label className="form-check-label" htmlFor="addCheck">Need This!</label>
                 </div>
               </div>
@@ -199,7 +198,7 @@ const InventoryPage = () => {
                       {categoryList.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
                     </select>
                     <div className="form-check mt-1">
-                      <input className="form-check-input" type="checkbox" checked={!!currentItem.needNow} onChange={e => setCurrentItem(p => p ? { ...p, needNow: e.target.checked } : null)} id="editCheck" />
+                      <input className="form-check-input" type="checkbox" checked={!!currentItem.needed} onChange={e => setCurrentItem(p => p ? { ...p, needed: e.target.checked } : null)} id="editCheck" />
                       <label className="form-check-label" htmlFor="editCheck">Need This!</label>
                     </div>
                   </div>

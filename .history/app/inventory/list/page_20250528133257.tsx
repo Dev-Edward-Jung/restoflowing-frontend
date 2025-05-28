@@ -145,11 +145,11 @@ const InventoryPage = () => {
             {items.map(item => (
               <div key={item.id} className={`d-flex gap-2 mb-2 align-items-center ${item.needNow ? 'alert-danger' : ''}`}>
                 <input className={`form-control ${item.needNow ? 'alert-danger' : ''}`} disabled value={item.name} />
-                <input className={`form-control ${item.needNow ? 'alert-danger' : ''}`} disabled value={item.name} type="number" />
-                <select className={`form-select ${item.needNow ? 'alert-danger' : ''}`} disabled defaultValue={item.unit}>
+                <input className={`form-control ${item.needNow ? 'alert-danger' : ''}`} disabled value={item.name} disabled value={item.quantity} type="number" />
+                <select className="form-select" disabled defaultValue={item.unit}>
                   <option>{item.unit}</option>
                 </select>
-                <button className={`${item.needNow ? 'btn btn-danger' : 'btn btn-primary'}`} onClick={() => setCurrentItem(item)} data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+                <button className="btn btn-primary" onClick={() => setCurrentItem(item)} data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
               </div>
             ))}
           </div>
