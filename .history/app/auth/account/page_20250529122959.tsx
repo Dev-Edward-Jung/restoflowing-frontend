@@ -30,7 +30,7 @@ export default function MyAccountPage() {
   };
 
   return (
-    <div className="container-lg m-4 p-4">
+    <div className="container-lg p-4">
     <div className="card mb-4">
         <h5 className="card-header">Your Account Information</h5>
         <div className="card-body">
@@ -71,8 +71,8 @@ export default function MyAccountPage() {
         </div>
 
         <div className="mt-2">
-          <button type="submit" className="btn btn-primary me-2">Save changes</button>
-          <button type="reset" className="btn btn-outline-secondary">Cancel</button>
+          <button type="submit" className="btn btn-primary">Save changes</button>
+          <button type="reset" className="btn btn-danger">Log Out</button>
         </div>
       </form>
     </div>

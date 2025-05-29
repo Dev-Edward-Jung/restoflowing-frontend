@@ -3,18 +3,18 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const handleToggle = () => {
-  if (typeof window !== 'undefined' && window.Helpers) {
-    window.Helpers.toggleCollapsed();
-  } else {
-    console.warn("Sneat Helpers.js not loaded yet.");
-  }
-};
-
 export default function OwnerMenu() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [menuInitialized, setMenuInitialized] = useState(false);
+  const [isMenuInitialized, setIsMenuInitialized] = useState(false);
+
+  const handleToggle = () => {
+    if (typeof window !== 'undefined' && window.Helpers?.toggleCollapsed) {
+      window.Helpers.toggleCollapsed();
+    } else {
+      console.warn("window.Helpers not available");
+    }
+  };
 
   useEffect(() => {
     const restaurantId = searchParams.get("restaurantId");
@@ -40,28 +40,30 @@ export default function OwnerMenu() {
       }
     });
 
-    if (!menuInitialized && typeof window !== 'undefined' && window.Menu) {
+    // Sneat 메뉴 강제 초기화 (Next.js에서는 수동 필요)
+    if (!isMenuInitialized && typeof window !== 'undefined' && window.Menu) {
       new window.Menu(document.querySelector('#layout-menu'), {
         orientation: 'vertical',
         closeChildren: false,
       });
-      setMenuInitialized(true);
+      setIsMenuInitialized(true);
     }
-  }, [router, searchParams, menuInitialized]);
+  }, [router, searchParams, isMenuInitialized]);
 
   return (
     <>
       <nav className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
         <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
           <span className="nav-item nav-link px-0 me-xl-4">
-            <button onClick={handleToggle}>
-              <img src="/img/icons/main-menu.png" className="logo-top" />
+            <button type="button" className="btn btn-icon" onClick={handleToggle}>
+              <i className="bx bx-menu bx-sm"></i>
             </button>
           </span>
         </div>
 
-        <a href="/auth/account" className="menu-link">My Account</a>
-
+        <a href="/auth/account">
+          My Account
+        </a>
         {/* <button
           type="submit"
           onClick={() => {
@@ -74,6 +76,7 @@ export default function OwnerMenu() {
           <i className="bx bx-log-out"></i>
           <span className="align-middle">Log Out</span>
         </button> */}
+        
       </nav>
 
       <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
@@ -82,11 +85,7 @@ export default function OwnerMenu() {
             <img src="/img/logo/logo-gray.png" className="logo-nav" alt="logo" />
           </a>
           <a onClick={handleToggle} className="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-            <i className="bx bx-chevron-left bx-sm align-middle">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18.3 5.71a1 1 0 00-1.41 0L12 10.59 7.11 5.7a1 1 0 00-1.41 1.42L10.59 12l-4.9 4.89a1 1 0 101.41 1.42L12 13.41l4.89 4.9a1 1 0 001.42-1.42L13.41 12l4.89-4.89a1 1 0 000-1.4z" />
-              </svg>
-            </i>
+            <i className="bx bx-chevron-left bx-sm align-middle"></i>
           </a>
         </div>
 
@@ -104,35 +103,18 @@ export default function OwnerMenu() {
             </a>
             <ul className="menu-sub">
               <li className="menu-item">
-                <a href="#" className="menu-link menu-toggle">
-                  <i className="menu-icon tf-icons bx bx-dock-top"></i>
-                  <div data-i18n="inventory">Inventory</div>
+                <a href="/restaurant/list" className="menu-link">
+                  <div data-i18n="Connections">Restaurant List</div>
                 </a>
-                <ul className="menu-sub">
-                  <li><a href="/inventory/list" className="menu-link">Inventory List</a></li>
-                  <li><a href="/inventory/category/list" className="menu-link">Category List</a></li>
-                </ul>
-              </li>
-              <li className="menu-item">
-                <a href="#" className="menu-link menu-toggle">
-                  <i className="menu-icon tf-icons bx bx-dock-top"></i>
-                  <div data-i18n="employee">Employee</div>
-                </a>
-                <ul className="menu-sub">
-                  <li><a href="/employee/list" className="menu-link">Employee List</a></li>
-                  <li><a href="/schedule/list" className="menu-link">Employee Schedule</a></li>
-                </ul>
               </li>
               <li className="menu-item">
                 <a href="/announcement/list" className="menu-link">
-                  <i className="menu-icon tf-icons bx bx-collection"></i>
                   <div data-i18n="Basic">Announcement</div>
                 </a>
               </li>
               <li className="menu-item">
-                <a href="/payroll/dashboard" className="menu-link">
-                  <i className="menu-icon tf-icons bx bx-collection"></i>
-                  <div data-i18n="Basic">PayRoll</div>
+                <a href="/schedule/list" className="menu-link">
+                  <div data-i18n="Basic">Schedule</div>
                 </a>
               </li>
             </ul>

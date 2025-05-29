@@ -33,7 +33,6 @@ const InventoryPage = () => {
   const [page, setPage] = useState(0);
   const [isLastPage, setIsLastPage] = useState(false);
   const { memberId, memberRole, memberEmail } = useUser();
-  console.log(memberRole)
 
   const getJwt = (): string | null => {
     if (typeof window === 'undefined') return null;
@@ -191,11 +190,7 @@ const InventoryPage = () => {
                 <select className={`form-select ${item.needNow ? 'alert-danger' : ''}`} disabled defaultValue={item.unit}>
                   <option>{item.unit}</option>
                 </select>
-                  <button 
-                  className={`${item.needNow ? 'btn btn-danger' : 'btn btn-primary'}`} 
-                  onClick={() => setCurrentItem(item)} 
-                  data-bs-toggle="modal" data-bs-target="#editModal">
-                  Edit</button>
+                <button className={`${item.needNow ? 'btn btn-danger' : 'btn btn-primary'}`} onClick={() => setCurrentItem(item)} data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
               </div>
             ))}
           </div>
@@ -262,16 +257,8 @@ const InventoryPage = () => {
             </div>
           </div>
         </div>
-        {
-          memberRole == "OWNER" || memberRole == "MANAGER" &&
-          <button 
-          className="btn btn-primary mt-3" 
-          data-bs-toggle="modal" 
-          data-bs-target="#addModal">
-          Add Product
-          </button>
-        }
-        
+
+        <button className="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addModal">Add Product</button>
       </div>
     </div>
   );
