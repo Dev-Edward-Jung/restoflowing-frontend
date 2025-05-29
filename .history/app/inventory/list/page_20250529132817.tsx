@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import AutoReload from '@/components/reload';
-import { useUser } from '@/context/UserContext';
 
 interface InventoryItem {
   id: number;
@@ -31,79 +30,60 @@ const InventoryPage = () => {
   const [currentItem, setCurrentItem] = useState<InventoryItem | null>(null);
   const [newItem, setNewItem] = useState<Partial<InventoryItem>>({ name: '', quantity: 0, unit: '', categoryId: 0, needNow: false });
   const [page, setPage] = useState(0);
-  const [isLastPage, setIsLastPage] = useState(false);
-  const { memberId, memberRole, memberEmail } = useUser();
-  console.log(memberRole)
+  const [hasMore, setHasMore] = useState(true);
+  const loader = useRef(null);
 
   const getJwt = (): string | null => {
     if (typeof window === 'undefined') return null;
     return localStorage.getItem('jwtToken');
   };
 
-  const fetchData = async (pageToLoad = 0) => {
-    const jwt = getJwt();
-    if (!jwt) {
-      router.push('/auth/owner/login');
-      return;
-    }
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/inventory/list/paged?restaurantId=${restaurantId}&page=${pageToLoad}&size=10`,
-      {
-        headers: { Authorization: `Bearer ${jwt}` },
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!restaurantId) return;
+      const jwt = getJwt();
+      if (!jwt) {
+        router.push('/auth/owner/login');
+        return;
       }
-    );
-
-    const json = await res.json();
-    const data = json.data;
-    setInventoryList(prev => {
-      const combined = [...prev, ...(data.content || [])];
-      const uniqueMap = new Map<number, InventoryItem>();
-      combined.forEach(item => {
-        if (!uniqueMap.has(item.id)) {
-          uniqueMap.set(item.id, item);
+  
+      try {
+        // 1. 인벤토리 페이징 리스트 (첫 페이지)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/paged?restaurantId=${restaurantId}&page=0`, {
+          headers: { Authorization: `Bearer ${jwt}` },
+        });
+  
+        const json = await res.json();
+        const data = json.data;
+  
+        if (data && data.content) {
+          setInventoryList(data.content);
+          setPage(1); // 다음 페이지를 위해 초기값 1로 세팅 (무한스크롤 시 필요)
+          setHasMore(!data.last);
         }
-      });
-      return Array.from(uniqueMap.values());
-    });
-    setIsLastPage(data.last);
-    setPage(data.page + 1);
-
-    if (pageToLoad === 0) {
-      const categoryRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category/list?restaurantId=${restaurantId}`, {
-        headers: { Authorization: `Bearer ${jwt}` },
-      });
-      const rawCategory = await categoryRes.json();
-      setCategoryList(rawCategory);
-
-      const unitRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/unit/list`, {
-        headers: { Authorization: `Bearer ${jwt}` },
-      });
-      const units = await unitRes.json();
-      setUnitList(units);
-    }
-  };
-
-  useEffect(() => {
-    if (!restaurantId) return;
-    fetchData(0);
-  }, [restaurantId]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (isLastPage) return;
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.body.offsetHeight;
-
-      if (scrollTop + windowHeight >= documentHeight - 100) {
-        fetchData(page);
+  
+        // 2. 카테고리 리스트
+        const categoryRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category/list?restaurantId=${restaurantId}`, {
+          headers: { Authorization: `Bearer ${jwt}` },
+        });
+        const rawCategory = await categoryRes.json();
+        setCategoryList(rawCategory);
+  
+        // 3. 유닛 리스트
+        const unitRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/unit/list`, {
+          headers: { Authorization: `Bearer ${jwt}` },
+        });
+        const units = await unitRes.json();
+        setUnitList(units);
+      } catch (err) {
+        console.error('🔥 초기 데이터 로딩 실패:', err);
       }
     };
+  
+    fetchData();
+  }, [restaurantId]);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [page, isLastPage, restaurantId]);
+
 
   const addItem = async () => {
     const jwt = getJwt();
@@ -131,6 +111,10 @@ const InventoryPage = () => {
     }
   };
 
+
+
+
+
   const updateItem = async () => {
     const jwt = getJwt();
     if (!jwt || !currentItem) return;
@@ -147,13 +131,17 @@ const InventoryPage = () => {
     if (res.ok) {
       const updated = await res.json();
       const data = updated.data;
+      console.log(data)
       setInventoryList(prev => prev.map(item => item.id === data.id ? data : item));
     }
   };
 
+
+  
+
   const deleteItem = async () => {
     const jwt = getJwt();
-    if (!jwt || !currentItem) return;
+    if (!jwt || !currentItem) return;item
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inventory/delete`, {
       method: 'DELETE',
@@ -169,6 +157,10 @@ const InventoryPage = () => {
       setCurrentItem(null);
     }
   };
+
+
+
+
 
   return (
     <div className='wrapper'>
@@ -191,11 +183,7 @@ const InventoryPage = () => {
                 <select className={`form-select ${item.needNow ? 'alert-danger' : ''}`} disabled defaultValue={item.unit}>
                   <option>{item.unit}</option>
                 </select>
-                  <button 
-                  className={`${item.needNow ? 'btn btn-danger' : 'btn btn-primary'}`} 
-                  onClick={() => setCurrentItem(item)} 
-                  data-bs-toggle="modal" data-bs-target="#editModal">
-                  Edit</button>
+                <button className={`${item.needNow ? 'btn btn-danger' : 'btn btn-primary'}`} onClick={() => setCurrentItem(item)} data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
               </div>
             ))}
           </div>
@@ -221,12 +209,10 @@ const InventoryPage = () => {
                   <label className="form-check-label" htmlFor="addCheck">Need This!</label>
                 </div>
               </div>
-              { memberRole == 'OWNER' || memberRole == 'MANAGER' &&
-                <div className="modal-footer">
-                  <button className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button className="btn btn-primary" onClick={addItem} data-bs-dismiss="modal">Add</button>
-                </div>
-              }     
+              <div className="modal-footer">
+                <button className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button className="btn btn-primary" onClick={addItem} data-bs-dismiss="modal">Add</button>
+              </div>
             </div>
           </div>
         </div>
@@ -262,16 +248,8 @@ const InventoryPage = () => {
             </div>
           </div>
         </div>
-        {
-          memberRole == "OWNER" || memberRole == "MANAGER" &&
-          <button 
-          className="btn btn-primary mt-3" 
-          data-bs-toggle="modal" 
-          data-bs-target="#addModal">
-          Add Product
-          </button>
-        }
-        
+
+        <button className="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addModal">Add Product</button>
       </div>
     </div>
   );
