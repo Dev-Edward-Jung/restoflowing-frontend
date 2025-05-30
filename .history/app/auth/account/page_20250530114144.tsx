@@ -77,8 +77,8 @@ export default function MyAccountPage() {
       <form id="formAccountSettings" onSubmit={handleSubmit}>
         <div className="row">
           <div className="mb-3 col-md-6">
-            <label htmlFor="firstName" className="form-label">Role</label>
-            <input className="form-control" type="text" id="firstName" name="firstName" value={memberRole || ''} onChange={handleChange} disabled autoFocus />
+            <label htmlFor="firstName" className="form-label">UserName</label>
+            <input className="form-control" type="text" id="firstName" name="firstName" value={memberRole || ''} onChange={handleChange} autoFocus />
           </div>
 
           <div className="mb-3 col-md-6">
@@ -101,7 +101,7 @@ export default function MyAccountPage() {
         </div>
 
         <div className="mt-2">
-          {/* <button type="submit" className="btn btn-primary me-5">Save changes</button> */}
+          <button type="submit" className="btn btn-primary me-5">Save changes</button>
           <button 
           type="reset"
            className="btn btn-danger"

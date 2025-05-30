@@ -33,6 +33,7 @@ const InventoryPage = () => {
   const [page, setPage] = useState(0);
   const [isLastPage, setIsLastPage] = useState(false);
   const { memberId, memberRole, memberEmail } = useUser();
+  console.log(memberRole)
 
   const getJwt = (): string | null => {
     if (typeof window === 'undefined') return null;
@@ -220,10 +221,12 @@ const InventoryPage = () => {
                   <label className="form-check-label" htmlFor="addCheck">Need This!</label>
                 </div>
               </div>
+              { (memberRole == 'OWNER' || memberRole == 'MANAGER') &&(
                 <div className="modal-footer">
                   <button className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   <button className="btn btn-primary" onClick={addItem} data-bs-dismiss="modal">Add</button>
                 </div>
+              )}     
             </div>
           </div>
         </div>
@@ -260,14 +263,14 @@ const InventoryPage = () => {
           </div>
         </div>
         {
-          (memberRole == "OWNER" || memberRole == "MANAGER") &&(
+          memberRole == "OWNER" || memberRole == "MANAGER" &&
           <button 
           className="btn btn-primary mt-3" 
           data-bs-toggle="modal" 
           data-bs-target="#addModal">
           Add Product
           </button>
-        )}
+        }
         
       </div>
     </div>

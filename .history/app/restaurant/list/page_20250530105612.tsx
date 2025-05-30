@@ -45,7 +45,9 @@ export default function RestaurantPage() {
         if (!res.ok) {
             throw new Error('Failed to load restaurant');
         }
+        console.log(res)
         const data = await res.json();
+        console.log(data)
         setRestaurants(data);
         setLoading(false)
 
@@ -82,6 +84,7 @@ export default function RestaurantPage() {
   
     if (res.ok) {
       const saved = await res.json();
+      console.log(saved);
       setRestaurants(prev => [...prev, saved]);
       setName('');
       setCity('');
