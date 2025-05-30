@@ -101,7 +101,7 @@ export default function MyAccountPage() {
         </div>
 
         <div className="mt-2">
-          {/* <button type="submit" className="btn btn-primary me-5">Save changes</button> */}
+          <button type="submit" className="btn btn-primary me-5">Save changes</button>
           <button 
           type="reset"
            className="btn btn-danger"

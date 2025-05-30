@@ -10,35 +10,9 @@ export default function OwnerLoginPage() {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [checkingAuth, setCheckingAuth] = useState(true);
 
   // On mount, load saved creds if any
   useEffect(() => {
-    const jwt = localStorage.getItem('jwtToken');
-
-    const validateToken = async () => {
-      if (!jwt) {
-        setCheckingAuth(false);
-        return;
-      }
-
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/validate`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${jwt}`
-        }
-      });
-
-      if (res.ok) {
-        router.replace('/restaurant/list'); // 또는 /home
-      } else {
-        setCheckingAuth(false); // 유효하지 않음 → 로그인 폼 보여줌
-      }
-    };
-
-
-    validateToken();
-
     const saved = localStorage.getItem('rememberMe') === 'true';
     if (saved) {
       const e = localStorage.getItem('rememberEmail') ?? '';

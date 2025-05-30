@@ -33,6 +33,7 @@ const InventoryPage = () => {
   const [page, setPage] = useState(0);
   const [isLastPage, setIsLastPage] = useState(false);
   const { memberId, memberRole, memberEmail } = useUser();
+  console.log(memberRole)
 
   const getJwt = (): string | null => {
     if (typeof window === 'undefined') return null;
@@ -260,14 +261,14 @@ const InventoryPage = () => {
           </div>
         </div>
         {
-          (memberRole == "OWNER" || memberRole == "MANAGER") &&(
+          memberRole == "OWNER" || memberRole == "MANAGER" &&
           <button 
           className="btn btn-primary mt-3" 
           data-bs-toggle="modal" 
           data-bs-target="#addModal">
           Add Product
           </button>
-        )}
+        }
         
       </div>
     </div>

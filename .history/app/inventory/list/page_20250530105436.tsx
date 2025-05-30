@@ -33,6 +33,7 @@ const InventoryPage = () => {
   const [page, setPage] = useState(0);
   const [isLastPage, setIsLastPage] = useState(false);
   const { memberId, memberRole, memberEmail } = useUser();
+  console.log(memberRole)
 
   const getJwt = (): string | null => {
     if (typeof window === 'undefined') return null;

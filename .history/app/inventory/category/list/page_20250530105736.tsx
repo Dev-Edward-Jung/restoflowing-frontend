@@ -14,7 +14,7 @@ export default function CategoryPage() {
   const [currentName, setCurrentName] = useState("");
   const [newCategoryName, setNewCategoryName] = useState("");
   const { memberId, memberRole, memberEmail } = useUser();
-
+  
 
   useEffect(() => {
     
@@ -182,12 +182,11 @@ export default function CategoryPage() {
         </div>
       </div>
       {
-        ( memberRole == "OWNER" || memberRole == "MANAGER") && (
-          <button className="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addModal">
-            Add Category
-          </button>
-        )
+        ( memberRole)
       }
+      <button className="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addModal">
+        Add Category
+      </button>
     </div>
     </div>
     
