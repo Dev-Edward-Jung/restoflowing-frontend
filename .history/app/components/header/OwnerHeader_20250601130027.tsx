@@ -96,7 +96,7 @@ export default function OwnerMenu() {
                   <div data-i18n="inventory">Inventory</div>
                 </a>
                 <ul className="menu-sub">
-                  <li><a href="/inventory/list" className="menu-link">Stock</a></li>
+                  <li><a href="/inventory/list" className="menu-link">Management</a></li>
                   <li><a href="/inventory/category/list" className="menu-link">Category</a></li>
                 </ul>
               </li>

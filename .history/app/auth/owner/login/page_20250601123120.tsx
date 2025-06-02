@@ -95,8 +95,8 @@ export default function OwnerLoginPage() {
     <div className='m-4'>
       <div className="authentication-wrapper authentication-basic container-p-y">
         <div className="authentication-inner">
-          <div className=''>
-            <div className="card-body">
+          <div className="card">
+            <div className="">
               <div className="app-brand justify-content-center">
                 <a href="/auth/owner/login" className="app-brand-link gap-2">
                   <img src="/img/logo/logo-gray.png" className="logo-auth" alt="Logo" />

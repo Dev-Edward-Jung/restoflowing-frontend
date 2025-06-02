@@ -92,10 +92,10 @@ export default function OwnerLoginPage() {
   };
 
   return (
-    <div className='m-4'>
+    <div>
       <div className="authentication-wrapper authentication-basic container-p-y">
         <div className="authentication-inner">
-          <div className=''>
+          <div className="card">
             <div className="card-body">
               <div className="app-brand justify-content-center">
                 <a href="/auth/owner/login" className="app-brand-link gap-2">

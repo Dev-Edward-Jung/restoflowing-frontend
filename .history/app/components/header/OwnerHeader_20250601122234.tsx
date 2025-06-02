@@ -87,7 +87,7 @@ export default function OwnerMenu() {
           <li className="menu-item">
             <a href="#" className="menu-link menu-toggle">
               <i className="menu-icon tf-icons bx bx-dock-top"></i>
-              <div data-i18n="Account Settings">Restaurant</div>
+              <div data-i18n="Account Settings">My Restaurant</div>
             </a>
             <ul className="menu-sub">
               <li className="menu-item">
@@ -96,8 +96,8 @@ export default function OwnerMenu() {
                   <div data-i18n="inventory">Inventory</div>
                 </a>
                 <ul className="menu-sub">
-                  <li><a href="/inventory/list" className="menu-link">Stock</a></li>
-                  <li><a href="/inventory/category/list" className="menu-link">Category</a></li>
+                  <li><a href="/inventory/list" className="menu-link">Inventory List</a></li>
+                  <li><a href="/inventory/category/list" className="menu-link">Category List</a></li>
                 </ul>
               </li>
               <li className="menu-item">
@@ -106,7 +106,7 @@ export default function OwnerMenu() {
                   <div data-i18n="employee">Employee</div>
                 </a>
                 <ul className="menu-sub">
-                  <li><a href="/employee/list" className="menu-link">Invite</a></li>
+                  <li><a href="/employee/list" className="menu-link">Employees</a></li>
                   <li><a href="/schedule/list" className="menu-link">Schedule</a></li>
                 </ul>
               </li>
