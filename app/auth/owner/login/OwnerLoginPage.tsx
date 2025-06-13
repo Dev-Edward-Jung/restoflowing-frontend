@@ -100,7 +100,8 @@ export default function OwnerLoginPage() {
             <div className="card-body">
               <div className="app-brand justify-content-center">
                 <a href="/auth/owner/login" className="app-brand-link gap-2">
-                  <Image src="/img/logo/logo-gray.png" className="logo-auth" alt="Logo" />
+                  <Image src="/img/logo/logo-gray.png" className="logo-auth" alt="Logo" 
+                  width={300} height={300}/>
                 </a>
               </div>
 

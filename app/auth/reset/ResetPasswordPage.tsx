@@ -66,8 +66,9 @@ export default function ResetPasswordPage() {
                     <div className="card">
                         <div className="card-body">
                             <div className="app-brand justify-content-center">
-                                <a href="/page/owner/login" className="app-brand-link gap-2">
-                                    <Image src="/img/logo/logo-gray.png" className="logo-auth" alt="logo" />
+                                <a href="/page/login/owner" className="app-brand-link gap-2">
+                                    <Image src="/img/logo/logo-gray.png" className="logo-auth" alt="logo" 
+                                    width={300} height={300}/>
                                 </a>
                             </div>
 

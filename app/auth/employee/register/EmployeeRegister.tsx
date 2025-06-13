@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
 
 
 export default function EmployeeRegisterPage() {
@@ -74,9 +76,9 @@ export default function EmployeeRegisterPage() {
     <div className="container-xxl d-flex justify-content-center align-items-center min-vh-100">
       <div className="card p-4" style={{ maxWidth: '500px', width: '100%' }}>
         <div className="text-center mb-4">
-          <a href="/page/owner/login">
-            <img src="/img/logo/logo-gray.png" className="logo-auth" alt="Logo" />
-          </a>
+                                <Link href="/auth/login/owner" className="app-brand-link gap-2">
+                                    <Image src="/img/logo/logo-gray.png" className="logo-auth" alt="logo" width={300} height={300} />
+                                </Link>
           <h4 className="mt-3">Welcome to our website</h4>
           <p>Login and manage your business</p>
         </div>

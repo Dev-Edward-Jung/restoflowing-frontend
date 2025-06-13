@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
                         <div className="card-body">
                             <div className="app-brand justify-content-center">
                                 <a href="/auth/owner/login" className="app-brand-link gap-2">
-                                    <Image src="/img/logo/logo-gray.png" className="logo-auth" alt="logo" />
+                                    <Image src="/img/logo/logo-gray.png" className="logo-auth" alt="logo" width={300} height={300}/>
                                 </a>
                             </div>
 
