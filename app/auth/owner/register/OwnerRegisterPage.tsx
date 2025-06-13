@@ -12,6 +12,7 @@ export default function OwnerRegisterPage() {
     });
     const [emailMessage, setEmailMessage] = useState('');
     const [error, setError] = useState('');
+    const [emailColor, setEmailColor] = useState('');
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
         setForm((prev) => ({
@@ -20,27 +21,36 @@ export default function OwnerRegisterPage() {
         }));
     };
 
-    const checkEmail = async () => {
-        if (!form.email.includes('@')) {
-            setEmailMessage('Invalid email format');
-            return;
-        }
+const checkEmail = async () => {
+    if (!form.email.includes('@')) {
+        setEmailMessage('Invalid email format');
+        setEmailColor('text-danger');
+        return;
+    }
 
-        try {
-            console.log('API URL:', process.env.NEXT_PUBLIC_API_URL);
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/checkEmail`, {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email: form.email }),
-            });
-            const data = await res.json();
-            setEmailMessage(data.used ? "You can't use this email" : "You can use this email");
-        } catch {
-            setEmailMessage('Error checking email');
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/checkEmail`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: form.email }),
+        });
+
+        const data = await res.json();
+
+        if (data) {
+            setEmailMessage("You can't use this email");
+            setEmailColor('text-danger'); // ❌ 이미 존재
+        } else {
+            setEmailMessage("You can use this email");
+            setEmailColor('text-success'); // ✅ 사용 가능
         }
-    };
+    } catch {
+        setEmailMessage('Error checking email');
+        setEmailColor('text-danger');
+    }
+};
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -66,7 +76,7 @@ export default function OwnerRegisterPage() {
         }
 
         try{
-
+            console.log(`${process.env.NEXT_PUBLIC_API_URL}/auth/register/owner`)
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register/owner`, {
                 method: 'POST',
                 credentials: 'include',
@@ -77,6 +87,7 @@ export default function OwnerRegisterPage() {
             });
 
             if (res.ok) {
+                console.log(res)
                 alert('Registration successful!');
                 window.location.href = "/auth/owner/login"
             } else {
@@ -96,11 +107,10 @@ export default function OwnerRegisterPage() {
                         <div className="card-body">
                             <div className="app-brand justify-content-center">
                                 <a href="/page/owner/login" className="app-brand-link gap-2">
-                                    <Image src="/img/logo/logo-gray.png" className="logo-auth" alt="logo" width={150} height={150} />
+                                    <Image src="/img/logo/logo-gray.png" className="logo-auth" alt="logo" width={300} height={300} />
                                 </a>
                             </div>
 
-                            <h4 className="mb-2">Welcome to Restoflowing.com</h4>
                             <p className="mb-4">Login and manage your business</p>
 
                             <form className="mb-3" onSubmit={handleSubmit}>
@@ -130,7 +140,7 @@ export default function OwnerRegisterPage() {
                                         onChange={handleChange}
                                         onBlur={checkEmail}
                                     />
-                                    <span className="form-text text-danger">{emailMessage}</span>
+                                    <span className={`mb-2 ${emailColor}`}>{emailMessage}</span>
                                 </div>
 
                                 <div className="mb-3 form-password-toggle">
@@ -166,7 +176,7 @@ export default function OwnerRegisterPage() {
                                 </div>
 
                                 <div className="mb-3">
-                                    <div id="errorMsg" className="text-danger mb-2">{error}</div>
+                                    <div className={`mb-2 text-danger`}>{error}</div>
                                     <div className="form-check">
                                         <input
                                             className="form-check-input"
