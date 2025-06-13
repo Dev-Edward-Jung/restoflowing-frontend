@@ -27,6 +27,7 @@ export default function OwnerRegisterPage() {
         }
 
         try {
+            console.log('API URL:', process.env.NEXT_PUBLIC_API_URL);
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/checkEmail`, {
                 method: 'POST',
                 headers: { 
@@ -95,7 +96,7 @@ export default function OwnerRegisterPage() {
                         <div className="card-body">
                             <div className="app-brand justify-content-center">
                                 <a href="/page/owner/login" className="app-brand-link gap-2">
-                                    <Image src="/img/logo/logo-gray.png" className="logo-auth" alt="logo" />
+                                    <Image src="/img/logo/logo-gray.png" className="logo-auth" alt="logo" width={150} height={150} />
                                 </a>
                             </div>
 
