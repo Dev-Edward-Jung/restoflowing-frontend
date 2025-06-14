@@ -29,7 +29,8 @@ const checkEmail = async () => {
     }
 
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/checkEmail`, {
+        console.log(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/checkEmail`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/checkEmail`, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
@@ -76,8 +77,8 @@ const checkEmail = async () => {
         }
 
         try{
-            console.log(`${process.env.NEXT_PUBLIC_API_URL}/auth/register/owner`)
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register/owner`, {
+            console.log(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register/owner`)
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register/owner`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
