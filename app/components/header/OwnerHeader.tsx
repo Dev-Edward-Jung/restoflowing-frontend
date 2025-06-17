@@ -59,7 +59,8 @@ export default function OwnerMenu() {
               <Image src="/img/icons/main-menu.png" 
               alt="main menu icon"
               className="logo-top"
-              fill
+              width={300}
+              height={300}
               />
             </button>
           </span>
@@ -71,7 +72,7 @@ export default function OwnerMenu() {
       <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
         <div className="app-brand demo">
           <a href="/restaurant/list" className="app-brand-link">
-            <Image src="/img/logo/logo-gray.png" className="logo-nav" alt="logo" />
+            <Image src="/img/logo/logo-gray.png" className="logo-nav" alt="logo" width={300} height={300}/>
           </a>
           <a onClick={handleToggle} className="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
             <i className="bx bx-chevron-left bx-sm align-middle">

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/UserContext';
+import AutoReload from '@/components/reload';
 
 interface Restaurant {
   id: number;
@@ -19,6 +20,7 @@ export default function RestaurantList() {
   const [city, setCity] = useState('');
   const { memberRole } = useUser();
   const [jwt, setJwt] = useState<string | null>(null);
+  console.log(memberRole)
   
 
   const getJwt = (): string | null => {
@@ -111,6 +113,7 @@ export default function RestaurantList() {
 
   return (
     <div className="layout-wrapper layout-content-navbar">
+      <AutoReload></AutoReload>
       <div className="layout-container">
         <div className="layout-page">
           <div className="content-wrapper">

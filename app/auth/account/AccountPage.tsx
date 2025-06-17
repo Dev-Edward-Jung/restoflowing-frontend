@@ -55,7 +55,7 @@ export default function MyAccountPage() {
   const fetchCategories = async () => {
     const jwt = getJwt();
     if (!jwt || !restaurantId) return;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me?restaurantId=${restaurantId}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me?restaurantId=${restaurantId}`, {
       credentials: "include",
       headers: {
         'Authorization': `Bearer ${jwt}`,

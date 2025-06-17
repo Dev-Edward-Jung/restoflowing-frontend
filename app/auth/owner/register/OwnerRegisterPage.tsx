@@ -29,7 +29,6 @@ const checkEmail = async () => {
     }
 
     try {
-        console.log(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/checkEmail`)
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/checkEmail`, {
             method: 'POST',
             headers: { 
@@ -77,7 +76,6 @@ const checkEmail = async () => {
         }
 
         try{
-            console.log(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register/owner`)
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register/owner`, {
                 method: 'POST',
                 credentials: 'include',
@@ -198,7 +196,7 @@ const checkEmail = async () => {
 
                             <p className="text-center mt-3">
                                 <span>Already have an account? </span>
-                                <a href="/page/owner/login"><span>Login Instead</span></a>
+                                <a href="/auth/owner/login"><span>Login Instead</span></a>
                             </p>
                         </div>
                     </div>
