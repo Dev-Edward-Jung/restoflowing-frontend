@@ -21,7 +21,7 @@ export default function ForgotPasswordPage() {
         if (!isValidEmail(email)) return;
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/forget/password`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/forget/password`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain' },
                 body: email,

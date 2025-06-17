@@ -52,7 +52,12 @@ export default function InventoryPage (){
         headers: { Authorization: `Bearer ${jwt}` },
       }
     );
+    if (!res.ok) {
+      console.error("API Error:", res.status, res.statusText);
+      return;
+    }
 
+    
     const json = await res.json();
     const data = json.data;
     setInventoryList(prev => {

@@ -57,7 +57,7 @@ export default function OwnerMenu() {
         <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
           <span className="nav-item nav-link px-0 me-xl-4">
             <button onClick={handleToggle}>
-              <Image src="/img/icons/main-menu.png" className="logo-top" alt="logo"/>
+              <Image src="/img/icons/main-menu.png" className="logo-top" alt="logo" width={300} height={300}/>
             </button>
           </span>
         </div>

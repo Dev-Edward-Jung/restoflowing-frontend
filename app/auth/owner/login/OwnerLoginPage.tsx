@@ -23,7 +23,7 @@ export default function OwnerLoginPage() {
         return;
       }
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/validate`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/validate`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${jwt}`
@@ -68,7 +68,7 @@ export default function OwnerLoginPage() {
     // send login request
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login/owner`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login/owner`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
