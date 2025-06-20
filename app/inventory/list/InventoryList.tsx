@@ -195,11 +195,14 @@ export default function InventoryPage (){
                 <select className={`form-select ${item.needNow ? 'alert-danger' : ''}`} disabled defaultValue={item.unit}>
                   <option>{item.unit}</option>
                 </select>
+                {
+                  memberRole == 'MANGER' || memberRole == 'OWNER' &&
                   <button 
                   className={`${item.needNow ? 'btn btn-danger' : 'btn btn-primary'}`} 
                   onClick={() => setCurrentItem(item)} 
                   data-bs-toggle="modal" data-bs-target="#editModal">
                   Edit</button>
+                }
               </div>
             ))}
           </div>
