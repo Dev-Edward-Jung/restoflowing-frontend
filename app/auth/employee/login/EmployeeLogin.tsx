@@ -84,7 +84,7 @@ export default function EmployeeLogin() {
 
                             {error && <div className="alert alert-danger">{error}</div>}
 
-                            <form method="POST" onClick={handleSubmit} id="formAuthentication">
+                            <form method="POST" id="formAuthentication">
                                 <div className="mb-3">
                                     <label htmlFor="email" className="form-label">Email</label>
                                     <input
@@ -136,7 +136,7 @@ export default function EmployeeLogin() {
                                     </div>
                                 </div>
                                 <div className="mb-3">
-                                    <button className="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+                                    <button className="btn btn-primary d-grid w-100" onClick={handleSubmit} type="submit">Sign in</button>
                                 </div>
                             </form>
                             <p className="text-center">
