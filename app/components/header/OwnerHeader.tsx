@@ -67,12 +67,17 @@ export default function OwnerMenu() {
         </div>
 
         {/* <a href="/auth/account" className="menu-link">Account</a> */}
-        <Image
-        src='/img/icons/Chat.png'
-        alt="Chat icon"
-        width={30}
-        height={30}
+        <a className="menu-link" href="/chat">
+          <Image
+          src='/img/icons/chat-gray.png'
+          alt="Chat icon"
+          style={{
+            cursor:'pointer'
+          }}
+          width={30}
+          height={30}
         />
+        </a>
       </nav>
 
       <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
