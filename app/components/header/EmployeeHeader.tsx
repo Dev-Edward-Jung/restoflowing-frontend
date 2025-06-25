@@ -83,7 +83,7 @@ export default function OwnerMenu() {
 
         <ul className="menu-inner py-1">
           <li className="menu-header small text-uppercase">
-            <span className="menu-header-text">Pages</span>
+            <span className="menu-header-text">Restaurant</span>
           </li>
 
           <li className="menu-item">

@@ -66,7 +66,13 @@ export default function OwnerMenu() {
           </span>
         </div>
 
-        <a href="/auth/account" className="menu-link">My Account</a>
+        {/* <a href="/auth/account" className="menu-link">Account</a> */}
+        <Image
+        src='/img/icons/Chat.png'
+        alt="Chat icon"
+        width={30}
+        height={30}
+        />
       </nav>
 
       <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
@@ -87,7 +93,7 @@ export default function OwnerMenu() {
 
         <ul className="menu-inner py-1">
           <li className="menu-header small text-uppercase">
-            <span className="menu-header-text">Pages</span>
+            <span className="menu-header-text">Restaurant</span>
           </li>
 
           <li className="menu-item">
