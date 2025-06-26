@@ -11,6 +11,9 @@ export default function ChattingPage() {
     const [isLeftSidebarOpen, setLeftSidebarOpen] = useState(false);
     const [isRightSidbarOpen, setRightSidebarOpen] = useState(false);
 
+    const handleLeftBar = () => {
+
+    }
 
 
 
@@ -19,120 +22,80 @@ export default function ChattingPage() {
     return (
         <div>
             {/* // <!-- Content --> */}
-            <div className="container-xxl flex-grow-1 container-p-y">
+            <div className="container-xxl flex-grow-1 container-p-y chat-wrapper">
 
                 <div className="app-chat card overflow-hidden">
                     <div className="row g-0">
-                        {
-                            isLeftSidebarOpen && (
-                                <div className="col app-chat-sidebar-left app-sidebar overflow-hidden" id="app-chat-sidebar-left">
-                                    <div className="chat-sidebar-left-user sidebar-header d-flex flex-column justify-content-center align-items-center flex-wrap px-6 pt-12">
-                                        <div className="avatar avatar-xl avatar-online chat-sidebar-avatar">
-                                            <Image src="/img/avatars/1.png" alt="Avatar" className="rounded-circle" width={60} height={60} />
-                                        </div>
-                                        <h5 className="mt-4 mb-0">John Doe</h5>
-                                        <span>Admin</span>
-                                        <i className="icon-base bx bx-x icon-lg cursor-pointer close-sidebar" data-bs-toggle="sidebar" data-target="#app-chat-sidebar-left"></i>
-                                    </div>
-                                    <div className="sidebar-body px-6 pb-6 ps">
-                                        <div className="my-6">
-                                            <div className="maxLength-wrapper">
-                                                <label
-                                                    htmlFor="chat-sidebar-left-user-about"
-                                                    className="text-uppercase text-body-secondary mb-1"
-                                                >
-                                                    About
-                                                </label>
-                                                <textarea
-                                                    id="chat-sidebar-left-user-about"
-                                                    className="form-control chat-sidebar-left-user-about maxLength-example"
-                                                    rows={3}
-                                                    maxLength={120}
-                                                    defaultValue="Hey there, we’re just writing to let you know that you’ve been subscribed to a repository on GitHub."
-                                                />
-                                                <small
-                                                    id="textarea-maxlength-info"
-                                                    className="maxLength label-success"
-                                                >
-                                                    60/120
-                                                </small>
+                        {/* <div
+                            className={`col app-chat-sidebar-left app-sidebar overflow-hidden ${isLeftSidebarOpen ? 'show' : ''
+                                }`}
+                            id="app-chat-sidebar-left"
+                        >
+                            <div className="chat-sidebar-left-user sidebar-header d-flex flex-column justify-content-center align-items-center flex-wrap px-6 pt-12">
+                                <div className="avatar avatar-xl avatar-online chat-sidebar-avatar">
+                                    <Image src="/img/avatars/1.png" alt="Avatar" className="rounded-circle" width={60} height={60} />
+                                </div>
+                                <h5 className="mt-4 mb-0">John Doe</h5>
+                                <span>Admin</span>
+                                <i className="icon-base bx bx-x icon-lg cursor-pointer close-sidebar" data-bs-toggle="sidebar" data-target="#app-chat-sidebar-left"></i>
+                            </div>
+                            <div className="sidebar-body px-6 pb-6 ps">
+                                <div className="my-6">
+                                    <p className="text-uppercase text-body-secondary mb-1">Settings</p>
+                                    <ul className="list-unstyled d-grid gap-4 ms-2 pt-2 text-heading">
+                                        <li className="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i className="icon-base bx bx-bell me-1"></i>
+                                                <span className="align-middle">Notification</span>
                                             </div>
-                                        </div>
-                                        <div className="my-6">
-                                            <p className="text-uppercase text-body-secondary mb-1">Status</p>
-                                            <div className="d-grid gap-2 pt-2 text-heading ms-2">
-                                                <div className="form-check form-check-success">
-                                                    <input name="chat-user-status" className="form-check-input" type="radio" value="active" id="user-active" defaultChecked />
-                                                    <label className="form-check-label" htmlFor="user-active">Online</label>
-                                                </div>
-                                                <div className="form-check form-check-warning">
-                                                    <input name="chat-user-status" className="form-check-input" type="radio" value="away" id="user-away" />
-                                                    <label className="form-check-label" htmlFor="user-away">Away</label>
-                                                </div>
-                                                <div className="form-check form-check-danger">
-                                                    <input name="chat-user-status" className="form-check-input" type="radio" value="busy" id="user-busy" />
-                                                    <label className="form-check-label" htmlFor="user-busy">Do not Disturb</label>
-                                                </div>
-                                                <div className="form-check form-check-secondary">
-                                                    <input name="chat-user-status" className="form-check-input" type="radio" value="offline" id="user-offline" />
-                                                    <label className="form-check-label" htmlFor="user-offline">Offline</label>
-                                                </div>
+                                            <div className="form-check form-switch mb-0 me-1">
+                                                <input type="checkbox" className="form-check-input" />
                                             </div>
-                                        </div>
-                                        <div className="my-6">
-                                            <p className="text-uppercase text-body-secondary mb-1">Settings</p>
-                                            <ul className="list-unstyled d-grid gap-4 ms-2 pt-2 text-heading">
-                                                <li className="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <i className="icon-base bx bx-lock-alt me-1"></i>
-                                                        <span className="align-middle">Two-step Verification</span>
-                                                    </div>
-                                                    <div className="form-check form-switch mb-0 me-1">
-                                                        <input type="checkbox" className="form-check-input" defaultChecked />
-                                                    </div>
-                                                </li>
-                                                <li className="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <i className="icon-base bx bx-bell me-1"></i>
-                                                        <span className="align-middle">Notification</span>
-                                                    </div>
-                                                    <div className="form-check form-switch mb-0 me-1">
-                                                        <input type="checkbox" className="form-check-input" />
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <i className="icon-base bx bx-user me-1"></i>
-                                                    <span className="align-middle">Invite Friends</span>
-                                                </li>
-                                                <li>
-                                                    <i className="icon-base bx bx-trash me-1"></i>
-                                                    <span className="align-middle">Delete Account</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div className="d-flex mt-6">
-                                            <button className="btn btn-primary w-60" data-bs-toggle="sidebar" data-overlay="" data-target="#app-chat-sidebar-left">
-                                                <i className="icon-base bx bx-log-out icon-sm me-2"></i>
-                                                Logout
-                                            </button>
-                                        </div>
-                                        <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-                                            <div className="ps__thumb-x" tabIndex={0} style={{ left: 0, width: 0 }}></div>
-                                        </div>
-                                        <div className="ps__rail-y" style={{ top: 0, height: 0 }}>
-                                            <div className="ps__thumb-y" tabIndex={0} style={{ top: 0, height: 0 }}>
-                                            </div>
-                                        </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div className="d-flex mt-6">
+                                    <button className="btn btn-primary w-60" data-bs-toggle="sidebar" data-overlay="" data-target="#app-chat-sidebar-left">
+                                        <i className="icon-base bx bx-log-out icon-sm me-2"></i>
+                                        Logout
+                                    </button>
+                                </div>
+                                <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
+                                    <div className="ps__thumb-x" tabIndex={0} style={{ left: 0, width: 0 }}></div>
+                                </div>
+                                <div className="ps__rail-y" style={{ top: 0, height: 0 }}>
+                                    <div className="ps__thumb-y" tabIndex={0} style={{ top: 0, height: 0 }}>
                                     </div>
                                 </div>
-                            )}
+                            </div>
+                        </div> */}
 
 
 
 
                         {/* <!-- Chat & Contacts --> */}
-                        <div className="col app-chat-contacts app-sidebar flex-grow-0 overflow-hidden border-end" id="app-chat-contacts">
-                            <div className="sidebar-header px-6 border-bottom d-flex align-items-center">
+                        {/* <div className="col app-chat-contacts app-sidebar flex-grow-0 overflow-hidden border-end" id="app-chat-contacts"> */}
+                        
+                        {isLeftSidebarOpen && (
+    <div
+      className="content-backdrop fade show"
+      onClick={() => setLeftSidebarOpen(false)}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+        zIndex: 1040,
+      }}
+    />
+  )}
+                        <div
+                            className={`col app-chat-contacts app-sidebar flex-grow-0 border-end 
+                                ${isLeftSidebarOpen ? 'show' : 'overflow-hidden'
+                                }`}
+                            id="app-chat-contacts"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="sidebar-header p-2 px-6 border-bottom d-flex align-items-center">
                                 <div className="d-flex align-items-center me-6 me-lg-0">
                                     <div className="flex-shrink-0 avatar avatar-online me-4" data-bs-toggle="sidebar" data-overlay="app-overlay-ex" data-target="#app-chat-sidebar-left">
                                         <Image className="user-avatar rounded-circle cursor-pointer" src="/img/avatars/1.png" alt="Avatar" width={60} height={60} />
@@ -153,7 +116,9 @@ export default function ChattingPage() {
                                     <li className="chat-contact-list-item chat-list-item-0 d-none">
                                         <h6 className="text-body-secondary mb-0">No Chats Found</h6>
                                     </li>
-                                    <li className="chat-contact-list-item mb-1">
+
+
+                                    <li className="chat-contact-list-item mb-1 chat-active">
                                         <a className="d-flex align-items-center">
                                             <div className="flex-shrink-0 avatar avatar-online">
                                                 <Image src="/img/avatars/6.png" alt="Avatar" className="rounded-circle" width={60} height={60} />
@@ -167,6 +132,8 @@ export default function ChattingPage() {
                                             </div>
                                         </a>
                                     </li>
+
+
                                     <li className="chat-contact-list-item mb-1">
                                         <a className="d-flex align-items-center">
                                             <div className="flex-shrink-0 avatar avatar-offline">
@@ -181,6 +148,8 @@ export default function ChattingPage() {
                                             </div>
                                         </a>
                                     </li>
+
+
                                     <li className="chat-contact-list-item mb-0">
                                         <a className="d-flex align-items-center">
                                             <div className="flex-shrink-0 avatar avatar-busy">
@@ -195,6 +164,8 @@ export default function ChattingPage() {
                                             </div>
                                         </a>
                                     </li>
+
+
                                 </ul>
                                 {/* <!-- Contacts --> */}
                                 <ul className="list-unstyled chat-contact-list mb-0 py-2" id="contact-list">
@@ -329,13 +300,15 @@ export default function ChattingPage() {
                                 <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}><div className="ps__thumb-x" tabIndex={0} style={{ left: 0, bottom: 0 }}>
                                 </div>
                                 </div>
-                                <div className="ps__rail-y" style={{ top: 0, height: 647, right: 0 }}>
-                                    <div className="ps__thumb-y" tabIndex={0} style={{ top: 0, height: 414 }}>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                         {/* <!-- /Chat contacts --> */}
+
+
+
+
+
 
                         {/* <!-- Chat conversation --> */}
                         <div className="col app-chat-conversation d-none align-items-center justify-content-center flex-column" id="app-chat-conversation">
@@ -348,45 +321,38 @@ export default function ChattingPage() {
                         {/* <!-- /Chat conversation --> */}
 
                         {/* <!-- Chat History --> */}
-                        <div className="col app-chat-history d-block" id="app-chat-history">
+                        <div className="col app-chat-history" id="app-chat-history">
                             <div className="chat-history-wrapper">
                                 <div className="chat-history-header border-bottom p-2 ">
                                     <div className="d-flex justify-content-between align-items-center">
                                         <div className="d-flex overflow-hidden align-items-center">
-                                            <i className="icon-base bx bx-menu icon-lg cursor-pointer d-lg-none d-block me-4" data-bs-toggle="sidebar" data-overlay="" data-target="#app-chat-contacts"></i>
-                                            <div className="flex-shrink-0 avatar avatar-online">
-                                                <Image src="/img/avatars/5.png" alt="Avatar" className="rounded-circle" data-bs-toggle="sidebar" data-overlay="" data-target="#app-chat-sidebar-right" width={60} height={60} />
+                                            <Image src="/img/icons/main-menu.png" alt="" className='ml-2' style={{ cursor: 'pointer' }}
+                                                width={15} height={15}
+                                                onClick={() => setLeftSidebarOpen(prev => !prev)}
+
+                                            />
+                                            <div className="flex-shrink-0 ml-3 avatar avatar-online">
+                                                <Image src="/img/avatars/5.png" alt="Avatar" className="rounded-circle ml-3" data-bs-toggle="sidebar" data-overlay="" data-target="#app-chat-sidebar-right" width={60} height={60} />
                                             </div>
-                                            <div className="chat-contact-info flex-grow-1 ms-4">
+                                            <div className="chat-contact-info flex-grow-1 ml-5">
                                                 <h6 className="m-0 fw-normal">Felecia Rower</h6>
                                                 <small className="user-status text-body">NextJS developer</small>
                                             </div>
                                         </div>
                                         <div className="d-flex align-items-center">
                                             <span className="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill">
-                                                <i className="icon-base bx bx-phone icon-md"></i>
+                                                <Image
+                                                    src='/img/icons/call.png'
+                                                    alt='call'
+                                                    width={15}
+                                                    height={15}
+                                                />
                                             </span>
-                                            <span className="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill">
-                                                <i className="icon-base bx bx-video icon-md"></i>
-                                            </span>
-                                            <span className="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill">
-                                                <i className="icon-base bx bx-search icon-md"></i>
-                                            </span>
-                                            <div className="dropdown">
-                                                <button className="btn btn-icon btn-text-secondary text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="true" id="chat-header-actions"><i className="icon-base bx bx-dots-vertical-rounded icon-md"></i></button>
-                                                <div className="dropdown-menu dropdown-menu-end" aria-labelledby="chat-header-actions">
-                                                    <a className="dropdown-item" href="javascript:void(0);">View Contact</a>
-                                                    <a className="dropdown-item" href="javascript:void(0);">Mute Notifications</a>
-                                                    <a className="dropdown-item" href="javascript:void(0);">Block Contact</a>
-                                                    <a className="dropdown-item" href="javascript:void(0);">Clear Chat</a>
-                                                    <a className="dropdown-item" href="javascript:void(0);">Report</a>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="chat-history-body ps ps--active-y p-4">
-                                    <ul className="list-unstyled chat-history">
+                                    <ul className="list-unstyled chat-history" style={{ height: 'calc(100vh - 45vh)', overflowY: 'auto' }}>
                                         <li className="chat-message chat-message-right">
                                             <div className="d-flex overflow-hidden">
                                                 <div className="chat-message-wrapper flex-grow-1">
@@ -550,7 +516,7 @@ export default function ChattingPage() {
                                                         <i className="icon-base bx bx-check-double icon-16px me-1"></i>
                                                         <small>6:15 AM</small>
                                                     </div>
-                                                    </div>
+                                                </div>
                                                 <div className="user-avatar flex-shrink-0 ms-4">
                                                     <div className="avatar avatar-sm">
                                                         <Image src="/img/avatars/1.png" alt="Avatar" className="rounded-circle" width={60} height={60} />
