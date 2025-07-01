@@ -16790,6 +16790,11 @@ input.number-input[type=number] {
   display: flex;
 }
 
+.chat-wrapper{
+  height: 100%;
+}
+
+
 .chat-contact-list{
   margin: 0.5rem;
   padding: 0.5rem;
@@ -16826,7 +16831,7 @@ input.number-input[type=number] {
 
 .app-chat .app-chat-history .chat-history-body {
   overflow: hidden;
-  block-size: calc(100vh - 22rem);
+  block-size: calc(100vh - 14rem);
   padding-block: 1.5rem;
   padding-inline: 1.5rem;
 }
