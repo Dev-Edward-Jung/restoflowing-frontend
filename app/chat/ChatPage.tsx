@@ -5,23 +5,23 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useUser } from '@/context/UserContext';
 import { connectWebSocket, disconnectWebSocket, sendMessage } from 'lib/websocket';
 import Image from 'next/image';
-import { Client, StompSubscription } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
+import { Client, StompSubscription, IMessage } from '@stomp/stompjs';
 
 
 
 interface ChatRequest {
-    roomId: string;
+    roomId: number;
     senderId: string;
     message: string;
     timestamp?: string; // 선택적: 클라이언트에서 보낼 수도 있음
+    senderRole: 'OWNER' | 'EMPLOYEE' | 'KITCHEN' | 'MANAGER'; // 또는 string, enum 등 백엔드 구조에 맞게
 }
 
 interface ChatResponse {
-    roomId: string;
+    roomId: number;
     senderId: string;
     senderName: string;
-    message: string;
+    message: string | null;
     timestamp: string;
     type: 'CHAT' | 'JOIN' | 'LEAVE'; // JOIN/LEAVE 이벤트 지원
 }
@@ -66,6 +66,7 @@ export default function ChattingPage() {
     const [input, setInput] = useState('');
     const stompRef = useRef<Client | null>(null);
     const subscriptionRef = useRef<StompSubscription | null>(null); // 👈 구독 객체 저장용
+
 
 
 
@@ -154,66 +155,97 @@ export default function ChattingPage() {
 
 
     // 1. 최초 WebSocket 연결 (mount 시)
-        useEffect(() => {
-            if (!jwt) return;
-        
-            // API URL이 http 또는 https일 수 있으므로 ws 또는 wss로 바꿔줌
-            const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
-            const wsURL = apiURL.replace(/^http/, 'ws') + '/api/ws/chat';
-        
-            const client = new Client({
-              brokerURL: wsURL,
-              connectHeaders: {
+    useEffect(() => {
+        if (!jwt) return;
+
+        // API URL이 http 또는 https일 수 있으므로 ws 또는 wss로 바꿔줌
+        const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+        const wsURL = apiURL.replace(/^http/, 'ws') + '/api/ws/chat';
+
+        const client = new Client({
+            brokerURL: wsURL,
+            connectHeaders: {
                 Authorization: `Bearer ${jwt}`,
-              },
-              onConnect: () => {
+            },
+            onConnect: () => {
                 console.log('✅ STOMP 연결 성공');
-              },
-              onStompError: (frame) => {
+            },
+            onStompError: (frame) => {
                 console.error('❌ STOMP 에러 발생:', frame.headers['message']);
                 console.error('상세 내용:', frame.body);
-              },
-              debug: (msg) => console.log('[STOMP]', msg),
-              reconnectDelay: 5000, // 재연결 시도 간격
-            });
+            },
+            debug: (msg) => console.log('[STOMP]', msg),
+            reconnectDelay: 5000, // 재연결 시도 간격
+        });
+
+        client.activate();
+
+        return () => {
+            client.deactivate();
+        };
+
+
         
-            client.activate();
-        
-            return () => {
-              client.deactivate();
-            };
-          }, [jwt, restaurantId]);
+    }, [jwt, restaurantId]);
 
 
 
     // ✅ 클릭 시 WebSocket 구독 및 메시지 로딩
 
+    // ✅ 2. 직원 클릭 → 메시지 로딩 & 구독
     const handleEmployeeClick = async (employee: Employee) => {
         setActiveId(employee.id);
         const roomId = `room-${employee.id}`;
 
-        // 1. 이전 구독 해제
-        subscriptionRef.current?.unsubscribe(); // 👈 올바른 방식
+        // 구독 해제
+        subscriptionRef.current?.unsubscribe();
 
-        // 2. 메시지 불러오기 (옵션)
+        // 메시지 로딩
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat/room/${roomId}/messages`, {
             headers: { Authorization: `Bearer ${jwt}` },
         });
-        // const json = await res.json();
-        // setMessages(json.data);
+        const json = await res.json();
+        setMessages(json.data);
 
-        // 3. 새 구독 시작
-        // const newSubscription = stompRef.current?.subscribe(
-        //   `/topic/chat/room/${roomId}`,
-        //   message => {
-        //     const msg = JSON.parse(message.body);
-        //     setMessages(prev => [...prev, msg]);
-        //   }
-        // );
-
-        // subscriptionRef.current = newSubscription ?? null; // 저장
+        // 새 구독 설정
+        if (stompRef.current && stompRef.current.connected) {
+            const newSubscription = stompRef.current.subscribe(
+                `/topic/chat/room/${roomId}`,
+                (message: IMessage) => {
+                    const msg = JSON.parse(message.body);
+                    setMessages(prev => [...prev, msg]);
+                }
+            );
+            subscriptionRef.current = newSubscription;
+        } else {
+            console.warn('❗ WebSocket이 아직 연결되지 않았습니다.');
+        }
     };
 
+    const handleSendMessage = () => {
+        if (!input.trim() || !activeId || !stompRef.current?.connected) return;
+    
+        const roomId = activeId;
+
+        if (!memberId || !memberRole){
+            alert("Please Login")
+            return;
+        }
+
+    
+
+        const message: ChatRequest = {
+            roomId: roomId,
+            senderId: memberId, // 로그인한 사용자 ID
+            senderRole : memberRole as 'OWNER' | 'EMPLOYEE' | 'KITCHEN' | 'MANAGER',
+            message: input,
+        };
+
+        
+        stompRef.current.send('/app/api/chat/send', {}, JSON.stringify(message));
+        setInput(''); // 입력창 비우기
+    };
+    
 
 
     return (
@@ -429,7 +461,9 @@ export default function ChattingPage() {
                                             <label htmlFor="attach-doc" className="form-label mb-0">
                                                 <input type="file" id="attach-doc" hidden />
                                             </label>
-                                            <button className="btn btn-primary">
+                                            <button className="btn btn-primary"
+                                            onClick={handleSendMessage}
+                                            >
                                                 <span>send</span>
                                             </button>
                                         </div>
